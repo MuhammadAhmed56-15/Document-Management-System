@@ -169,7 +169,7 @@
     .req-details-grid {
         display: flex;
         flex-wrap: wrap;
-        font-size: 18px;
+        font-size:24px;
         line-height: 2.2;
         margin-bottom: 20px;
     }
@@ -262,7 +262,7 @@
     }
     .letterhead-subtitle {
         font-weight: 800;
-        font-size: 18px;
+        font-size:24px;
         margin: 0 0 3pt 0;
         font-family: 'Times New Roman', Times, serif;
         color: #000;
@@ -308,24 +308,28 @@
             padding: 0 !important;
             margin: 0 !important;
             min-height: auto !important;
+            overflow: visible !important;
         }
         .content {
             margin-left: 0 !important;
             padding: 0 !important;
+            overflow: visible !important;
         }
         .req-container {
             max-width: 100% !important;
             width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
+            overflow: visible !important;
         }
         .req-card {
             box-shadow: none !important;
             border: none !important;
             border-radius: 0 !important;
             padding: 0 !important;
+            overflow: visible !important;
         }
-        .req-card-body { padding: 0 !important; }
+        .req-card-body { padding: 0 !important; overflow: visible !important; }
         .paper-form {
             box-shadow: none !important;
             border: none !important;
@@ -334,6 +338,7 @@
             max-width: 100% !important;
             font-size: 13pt !important;
             line-height: 1.6 !important;
+            overflow: visible !important;
         }
         .action-section { display: none !important; }
         .forward-history-item { page-break-inside: avoid; }
@@ -412,7 +417,7 @@
             break-inside: auto !important;
         }
         .print-doc-preview { display: block !important; margin: 6pt 0 14pt; }
-        .doc-sheet { page-break-inside: auto; }
+        .doc-sheet { page-break-inside: auto; overflow: visible !important; overflow-x: visible !important; }
         .doc-sheet tr { page-break-inside: avoid; break-inside: avoid; }
     }
 
@@ -464,9 +469,15 @@
     .doc-sheet tr:nth-child(even) td { background: #f8fafc; }
     .doc-sheet tr:nth-child(odd) td { background: #fff; }
     .pdf-page-img {
-        display: block; width: 100%; height: auto; margin: 0 0 8pt;
-        border: 1px solid #e2e8f0; border-radius: 3pt;
+        display: block; width: 100%; height: auto; 
+        max-height: calc(100vh - 20px); 
+        object-fit: contain; margin: 0 auto 10px auto;
+        border: 1px solid #e2e8f0; border-radius: 3pt; background: #fff;
+        box-sizing: border-box;
         page-break-inside: avoid; break-inside: avoid;
+    }
+    .print-doc-preview .pdf-page-img:first-child {
+        max-height: calc(100vh - 250px);
     }
 
     /* Print attachments section (hidden on screen, shown only in print) */
@@ -544,6 +555,147 @@
         color: #555;
     }
 
+    /* ===== Remark Attachment Upload ===== */
+    .att-upload-zone {
+        border: 2px dashed #a7f3d0;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+        padding: 1.8rem 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    .att-upload-zone:hover, .att-upload-zone.dragover {
+        border-color: #059669;
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(5,150,105,0.15);
+    }
+    .att-upload-zone input[type='file'] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+    .att-upload-icon {
+        width: 52px; height: 52px;
+        background: linear-gradient(135deg, #059669, #10b981);
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 12px auto;
+        box-shadow: 0 4px 14px rgba(5,150,105,0.3);
+    }
+    .att-preview-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+    }
+    .att-preview-chip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        border: 1.5px solid #a7f3d0;
+        border-radius: 10px;
+        padding: 7px 12px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #065f46;
+        font-family: var(--font-sans);
+        box-shadow: 0 2px 8px rgba(5,150,105,0.08);
+        transition: all 0.2s ease;
+        animation: chipIn 0.3s ease;
+    }
+    @keyframes chipIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    .att-preview-chip .chip-remove {
+        cursor: pointer;
+        color: #dc2626;
+        font-size: 0.9rem;
+        margin-left: 4px;
+        transition: color 0.2s;
+    }
+    .att-preview-chip .chip-remove:hover { color: #991b1b; }
+    
+    /* History attachments */
+    .fw-att-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .fw-att-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 8px 14px;
+        transition: all 0.2s ease;
+        max-width: 500px;
+    }
+    .fw-att-item:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    .fw-att-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #334155;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 15px;
+    }
+    .fw-att-name i {
+        color: #059669;
+        font-size: 1rem;
+    }
+    .fw-att-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+    .fw-att-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    .fw-att-btn.view-btn {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+    }
+    .fw-att-btn.view-btn:hover {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+    .fw-att-btn.download-btn {
+        background: #f0fdf4;
+        color: #059669;
+        border: 1px solid #bbf7d0;
+    }
+    .fw-att-btn.download-btn:hover {
+        background: #d1fae5;
+        color: #047857;
+    }
 </style>
 
 <div class="req-page-wrapper">
@@ -594,16 +746,16 @@
                     </table>
                     <div style="border-top:2px solid #000;margin:6pt 0 12pt 0;"></div>
                     
-                    <div class="text-center" style="font-size: 18px; margin-top: 15px; font-weight: bold;">
+                    <div class="text-center" style="font-size:24px; margin-top: 15px; font-weight: bold;">
                         To, &nbsp;&nbsp;&nbsp;The Zonal Manager, Water & Sanitation Services, {% if req.zone %}{{ req.zone }}{% else %}Zone-C{% endif %}, Peshawar.
                     </div>
                     
-                    <div class="text-center mb-4 mt-2" style="font-size: 18px; font-weight: bold;">
+                    <div class="text-center mb-4 mt-2" style="font-size:24px; font-weight: bold;">
                         Respected Sir!
                     </div>
                     
                     <!-- Line 1: vehicle number + UC route -->
-                    <div style="display:flex; align-items:center; gap:8px; font-size:18px; margin-bottom:15px; flex-wrap:wrap; line-height: 2;">
+                    <div style="display:flex; align-items:center; gap:8px; font-size:24px; margin-bottom:15px; flex-wrap:wrap; line-height: 2;">
                         <span>It is respectfully submitted that vehicle number</span>
                         <span class="form-value-text text-center">{{ req.vehicle_number }}</span>
                         <span>serving in U.C / Route</span>
@@ -614,7 +766,7 @@
                     <!-- Issues Box -->
                     <div class="issue-text-box">{{ req.issue_description }}</div>
                     
-                    <div style="font-size: 18px; line-height: 2.2; margin-bottom: 20px;">
+                    <div style="font-size:24px; line-height: 2.2; margin-bottom: 20px;">
                         {% if req.previous_issue_date %}
                             The above-mentioned problem(s) was resolved before on 
                             <span class="form-value-text text-center">{{ req.previous_issue_date|date:"d M Y" }}</span>. 
@@ -645,7 +797,7 @@
                         </div>
                     </div>
                     
-                    <div style="font-size: 18px; margin-bottom: 40px;">
+                    <div style="font-size:24px; margin-bottom: 40px;">
                         <strong>Estimated Cost (if any):</strong> 
                         <span class="form-value-text" style="min-width: 250px;">{{ req.estimated_cost|default:"N/A" }}</span>
                     </div>
@@ -783,8 +935,8 @@
                             {% else %}
                             <div style="height:110px; display:flex; align-items:center; justify-content:center; background:#f9fafb;">
                                 <div style="text-align:center;">
-                                    <i class="fas fa-file-alt" style="font-size:3rem; color:#6b7280;"></i>
-                                    <div style="font-size:0.68rem; font-weight:700; color:#6b7280; margin-top:4px; text-transform:uppercase; letter-spacing:0.05em;">{{ ext|upper }}</div>
+                                    <i class="fas fa-file-alt" style="font-size:3rem; color:#000;"></i>
+                                    <div style="font-size:0.68rem; font-weight:700; color:#000; margin-top:4px; text-transform:uppercase; letter-spacing:0.05em;">{{ ext|upper }}</div>
                                 </div>
                             </div>
                             {% endif %}
@@ -843,7 +995,7 @@
                         font-family:var(--font-sans);
                     ">
                         <i class="fas fa-paperclip" style="font-size:2rem; color:#d1fae5; margin-bottom:10px; display:block;"></i>
-                        <div style="font-size:0.9rem; font-weight:600; color:#6b7280;">No attachments submitted</div>
+                        <div style="font-size:0.9rem; font-weight:600; color:#000;">No attachments submitted</div>
                         <div style="font-size:0.78rem; margin-top:4px;">This requisition was submitted without any attachments.</div>
                     </div>
                     {% endif %}
@@ -889,7 +1041,7 @@
                         <div class="print-doc-preview" data-url="{{ att.file.url }}" data-type="docx"></div>
                         {% else %}
                         <div class="print-att-file-icon">
-                            <span class="icon-glyph" style="color:#6b7280;">&#128196;</span>
+                            <span class="icon-glyph" style="color:#000;">&#128196;</span>
                             <div class="file-meta">
                                 <div class="file-name">{{ forloop.counter }}. {{ disp_name }}</div>
                                 <div class="file-type">{{ att.file_extension|upper }} File &mdash; {{ att.uploaded_at|date:"d M Y" }}</div>
@@ -953,6 +1105,75 @@
                                     </div>
                                     {% endif %}
 
+                                    <!-- Attachments (only shown for fleet officer remarks) -->
+                                    {% if fw.is_fleet_officer_remark %}
+                                    {% with atts=fw.attachment_1|yesno:","|add:fw.attachment_2|yesno:","|add:fw.attachment_3|yesno:","|add:fw.attachment_4|yesno:","|add:fw.attachment_5|yesno:"," %}
+                                    {% if fw.attachment_1 or fw.attachment_2 or fw.attachment_3 or fw.attachment_4 or fw.attachment_5 %}
+                                    <div class="fw-att-grid">
+                                        {% if fw.attachment_1 %}
+                                        <div class="fw-att-item">
+                                            <div class="fw-att-name" title="{{ fw.attachment_1.name }}">
+                                                <i class="fas fa-file-pdf"></i> {{ fw.attachment_1.name|slice:"45:"|cut:"requisition_remark_attachments/"|default:"Attachment 1"|truncatechars:40 }}
+                                            </div>
+                                            <div class="fw-att-actions">
+                                                <a href="{{ fw.attachment_1.url }}" target="_blank" class="fw-att-btn view-btn"><i class="fas fa-eye"></i> View</a>
+                                                <a href="{{ fw.attachment_1.url }}" download class="fw-att-btn download-btn" title="Download"><i class="fas fa-download"></i></a>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if fw.attachment_2 %}
+                                        <div class="fw-att-item">
+                                            <div class="fw-att-name" title="{{ fw.attachment_2.name }}">
+                                                <i class="fas fa-file-pdf"></i> {{ fw.attachment_2.name|slice:"45:"|cut:"requisition_remark_attachments/"|default:"Attachment 2"|truncatechars:40 }}
+                                            </div>
+                                            <div class="fw-att-actions">
+                                                <a href="{{ fw.attachment_2.url }}" target="_blank" class="fw-att-btn view-btn"><i class="fas fa-eye"></i> View</a>
+                                                <a href="{{ fw.attachment_2.url }}" download class="fw-att-btn download-btn" title="Download"><i class="fas fa-download"></i></a>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if fw.attachment_3 %}
+                                        <div class="fw-att-item">
+                                            <div class="fw-att-name" title="{{ fw.attachment_3.name }}">
+                                                <i class="fas fa-file-pdf"></i> {{ fw.attachment_3.name|slice:"45:"|cut:"requisition_remark_attachments/"|default:"Attachment 3"|truncatechars:40 }}
+                                            </div>
+                                            <div class="fw-att-actions">
+                                                <a href="{{ fw.attachment_3.url }}" target="_blank" class="fw-att-btn view-btn"><i class="fas fa-eye"></i> View</a>
+                                                <a href="{{ fw.attachment_3.url }}" download class="fw-att-btn download-btn" title="Download"><i class="fas fa-download"></i></a>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if fw.attachment_4 %}
+                                        <div class="fw-att-item">
+                                            <div class="fw-att-name" title="{{ fw.attachment_4.name }}">
+                                                <i class="fas fa-file-pdf"></i> {{ fw.attachment_4.name|slice:"45:"|cut:"requisition_remark_attachments/"|default:"Attachment 4"|truncatechars:40 }}
+                                            </div>
+                                            <div class="fw-att-actions">
+                                                <a href="{{ fw.attachment_4.url }}" target="_blank" class="fw-att-btn view-btn"><i class="fas fa-eye"></i> View</a>
+                                                <a href="{{ fw.attachment_4.url }}" download class="fw-att-btn download-btn" title="Download"><i class="fas fa-download"></i></a>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if fw.attachment_5 %}
+                                        <div class="fw-att-item">
+                                            <div class="fw-att-name" title="{{ fw.attachment_5.name }}">
+                                                <i class="fas fa-file-pdf"></i> {{ fw.attachment_5.name|slice:"45:"|cut:"requisition_remark_attachments/"|default:"Attachment 5"|truncatechars:40 }}
+                                            </div>
+                                            <div class="fw-att-actions">
+                                                <a href="{{ fw.attachment_5.url }}" target="_blank" class="fw-att-btn view-btn"><i class="fas fa-eye"></i> View</a>
+                                                <a href="{{ fw.attachment_5.url }}" download class="fw-att-btn download-btn" title="Download"><i class="fas fa-download"></i></a>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    {% endwith %}
+                                    {% endif %}
+
                                     <!-- Timestamp -->
                                     <div style="font-size: 0.8rem; color: #94a3b8; display: flex; align-items: center; gap: 5px;">
                                         <i class="far fa-clock"></i> {{ fw.forwarded_at|date:"d M Y, h:i A" }}
@@ -994,7 +1215,7 @@
                     {% endif %}
 
                     <!-- Forward Requisition Form -->
-                    <form action="{% url 'forward_requisition' req.id %}" method="POST" class="mt-4" onsubmit="document.getElementById('hiddenStatus').value = document.getElementById('statusSelect').value;">
+                    <form action="{% url 'forward_requisition' req.id %}" method="POST" enctype="multipart/form-data" class="mt-4" onsubmit="document.getElementById('hiddenStatus').value = document.getElementById('statusSelect') ? document.getElementById('statusSelect').value : '';">
                         {% csrf_token %}
                         <input type="hidden" name="status" id="hiddenStatus" value="">
                         
@@ -1009,6 +1230,34 @@
                                 style="padding: 14px 18px; font-size: 0.97rem; color: #334155; border: 2px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); resize: vertical; transition: border-color 0.2s ease; font-family: var(--font-sans); line-height: 1.6;"
                                 onfocus="this.style.borderColor='#3b82f6';" onblur="this.style.borderColor='#e2e8f0';"></textarea>
                         </div>
+
+                        {% if is_fleet_officer %}
+                        <!-- Attachment Upload — only for Fleet Officers (fzoned) -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold mb-2" style="color: #64748b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.07em;">
+                                <i class="fas fa-paperclip me-1" style="color: #059669;"></i> Attachments
+                                <span style="font-weight: 400; text-transform: none; letter-spacing: 0; color: #94a3b8; font-size: 0.8rem;">(Optional — Max 5 files)</span>
+                            </label>
+
+                            <div class="att-upload-zone" id="attUploadZone">
+                                <input type="file" name="remark_attachments" id="remarkAttachments"
+                                    multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                                    onchange="handleAttachmentChange(this)">
+                                <div class="att-upload-icon">
+                                    <i class="fas fa-cloud-upload-alt" style="color: #fff; font-size: 1.4rem;"></i>
+                                </div>
+                                <div style="font-weight: 700; color: #065f46; font-family: var(--font-sans); font-size: 1rem; margin-bottom: 4px;">
+                                    Click to upload or drag & drop
+                                </div>
+                                <div style="font-size: 0.8rem; color:#000; font-family: var(--font-sans);">
+                                    Supported: Images, PDF, Word, Excel &bull; Max 5 files
+                                </div>
+                            </div>
+
+                            <!-- Preview chips -->
+                            <div class="att-preview-grid" id="attPreviewGrid"></div>
+                        </div>
+                        {% endif %}
 
                         <!-- Forward To & Button (Front to Front) -->
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-4">
@@ -1149,6 +1398,74 @@ document.addEventListener('DOMContentLoaded', function () {
 function printRequisition() {
     Promise.all(__printJobs).then(function () { window.print(); });
 }
+
+/* ============================================
+   ATTACHMENT UPLOAD ZONE (Fleet Officer / fzoned only)
+   ============================================ */
+var selectedFiles = [];
+
+function handleAttachmentChange(input) {
+    var newFiles = Array.from(input.files);
+    selectedFiles = selectedFiles.concat(newFiles);
+    if (selectedFiles.length > 5) {
+        alert('Maximum 5 attachments allowed. Extra files removed.');
+        selectedFiles = selectedFiles.slice(0, 5);
+    }
+    renderChips();
+    syncFilesInput(input);
+}
+
+function renderChips() {
+    var grid = document.getElementById('attPreviewGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    selectedFiles.forEach(function(file, idx) {
+        var ext = file.name.split('.').pop().toLowerCase();
+        var iconClass = 'fas fa-file-alt', iconColor = '#6b7280';
+        if (['jpg','jpeg','png','gif','webp','bmp'].indexOf(ext) > -1) { iconClass = 'fas fa-file-image'; iconColor = '#8b5cf6'; }
+        else if (ext === 'pdf') { iconClass = 'fas fa-file-pdf'; iconColor = '#ef4444'; }
+        else if (['doc','docx'].indexOf(ext) > -1) { iconClass = 'fas fa-file-word'; iconColor = '#2563eb'; }
+        else if (['xls','xlsx','csv'].indexOf(ext) > -1) { iconClass = 'fas fa-file-excel'; iconColor = '#16a34a'; }
+        var chip = document.createElement('div');
+        chip.className = 'att-preview-chip';
+        chip.innerHTML = '<i class="' + iconClass + '" style="color:' + iconColor + '; font-size:1rem;"></i>'
+            + '<span style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + file.name + '">' + file.name + '</span>'
+            + '<span class="chip-remove" onclick="removeFile(' + idx + ')" title="Remove">\u00d7</span>';
+        grid.appendChild(chip);
+    });
+}
+
+function removeFile(idx) {
+    selectedFiles.splice(idx, 1);
+    renderChips();
+    var input = document.getElementById('remarkAttachments');
+    if (input) syncFilesInput(input);
+}
+
+function syncFilesInput(input) {
+    try {
+        var dt = new DataTransfer();
+        selectedFiles.forEach(function(f){ dt.items.add(f); });
+        input.files = dt.files;
+    } catch(e) {}
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var zone = document.getElementById('attUploadZone');
+    if (!zone) return;
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        var input = document.getElementById('remarkAttachments');
+        if (input && e.dataTransfer.files.length) {
+            selectedFiles = selectedFiles.concat(Array.from(e.dataTransfer.files)).slice(0, 5);
+            renderChips();
+            syncFilesInput(input);
+        }
+    });
+});
 </script>
 
 {% endblock %}

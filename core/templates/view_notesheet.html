@@ -890,45 +890,40 @@
   .ph-center { width: 70%; text-align: center; padding: 4pt 6pt; }
   .ph-title {
     font-weight: 700;
-    font-size: 21px;
-    margin: 0 0 5pt 0;
-    font-family: Calibri, Arial, sans-serif;
-    color: #6b7280;
+    font-size: 17px;
+    margin: 0 0 4pt 0;
+    font-family:Calibri,Arial,sans-serif; color:#6b7280;
     line-height: 1.35;
     text-transform: uppercase;
     word-wrap: break-word;
   }
   .ph-title u { text-decoration: underline; text-underline-offset: 4px; }
   .ph-sub {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    font-family: Calibri, Arial, sans-serif;
-    color: #6b7280;
+    font-family:Calibri,Arial,sans-serif; color:#6b7280;
     line-height: 1.35;
     text-transform: uppercase;
     margin: 0 0 3pt 0;
   }
   .ph-prov {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
-    font-family: Calibri, Arial, sans-serif;
-    color: #6b7280;
+    font-family:Calibri,Arial,sans-serif; color:#6b7280;
     line-height: 1.35;
-    margin: 0;
+    margin: 0 0 2pt 0;
   }
   .ph-addr {
     font-size: 12px;
     font-weight: 700;
-    font-family: Calibri, Arial, sans-serif;
-    color: #6b7280;
+    font-family:Calibri,Arial,sans-serif; color:#6b7280;
     line-height: 1.35;
     margin: 0;
   }
   .ph-phone {
-    font-size: 11px;
+    font-size: 17px;
     font-weight: 700;
-    font-family: Calibri, Arial, sans-serif;
-    color: #6b7280;
+    font-family:Calibri,Arial,sans-serif; color:#6b7280;
     line-height: 1.35;
     margin: 3pt 0 0;
   }
@@ -939,11 +934,253 @@
     align-items: flex-start;
     gap: 16pt;
     margin: 0 0 16pt 0;
-    font-family: Calibri, Arial, sans-serif;
-    color: #000;
+    font-family:Calibri,Arial,sans-serif; color:#6b7280;
   }
   .ph-subject { font-size: 13pt; font-weight: 700; flex: 1; }
   .ph-date { font-size: 10pt; font-weight: 700; white-space: nowrap; padding-top: 3pt; }
+
+  /* ============================================
+     PRINT ATTACHMENT PREVIEWS (image / file card)
+     ============================================ */
+  /* ============================================
+     ATTACHMENTS MODAL / PANEL
+     ============================================ */
+  .att-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(10, 33, 24, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .att-modal-overlay.is-open { display: flex; }
+
+  .att-modal {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 30px 80px rgba(10,33,24,0.22), 0 4px 20px rgba(10,33,24,0.10);
+    width: 100%;
+    max-width: 860px;
+    margin: auto;
+    overflow: hidden;
+    animation: attSlideUp 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+    border: 1px solid rgba(16,185,129,0.1);
+  }
+
+  @keyframes attSlideUp {
+    from { opacity: 0; transform: translateY(40px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .att-modal__header {
+    background: linear-gradient(135deg, #0a2118 0%, #1a4731 100%);
+    padding: 22px 28px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .att-modal__header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 85% 30%, rgba(16,185,129,0.2), transparent 60%);
+    pointer-events: none;
+  }
+  .att-modal__title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .att-modal__title-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .att-modal__close {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .att-modal__close:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+
+  .att-modal__body {
+    padding: 28px;
+    background: #f8fafc;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+  .att-modal__body::-webkit-scrollbar { width: 6px; }
+  .att-modal__body::-webkit-scrollbar-track { background: #f1f5f9; }
+  .att-modal__body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+  .att-empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 1rem;
+  }
+
+  .att-flag-group {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(15,23,42,0.05);
+    transition: box-shadow 0.2s;
+  }
+  .att-flag-group:hover { box-shadow: 0 4px 16px rgba(15,23,42,0.08); }
+  .att-flag-group:last-child { margin-bottom: 0; }
+
+  .att-flag-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: linear-gradient(90deg, #f0fdf4, #f8fafc);
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .att-flag-badge {
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: white;
+    flex-shrink: 0;
+  }
+  .att-flag-badge--red    { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .att-flag-badge--green  { background: linear-gradient(135deg, #10b981, #059669); }
+  .att-flag-badge--blue   { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+  .att-flag-badge--gray   { background: linear-gradient(135deg, #94a3b8, #64748b); }
+  .att-flag-badge--orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+
+  .att-flag-name {
+    font-weight: 700;
+    font-size: 0.9375rem;
+    color: #0f172a;
+  }
+  .att-flag-count {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  .att-file-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .att-file-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+  }
+  .att-file-item:hover {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    transform: translateX(2px);
+  }
+
+  .att-file-type-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11pt; font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+  .att-file-type-icon--pdf   { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .att-file-type-icon--word  { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+  .att-file-type-icon--excel { background: linear-gradient(135deg, #22c55e, #16a34a); }
+  .att-file-type-icon--ppt   { background: linear-gradient(135deg, #f97316, #ea580c); }
+  .att-file-type-icon--img   { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+  .att-file-type-icon--zip   { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .att-file-type-icon--file  { background: linear-gradient(135deg, #94a3b8, #64748b); }
+
+  .att-file-info { flex: 1; min-width: 0; }
+  .att-file-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #0f172a;
+    word-break: break-word;
+    line-height: 1.4;
+  }
+  .att-file-meta {
+    font-size: 0.775rem;
+    color: #64748b;
+    margin-top: 3px;
+  }
+
+  .att-file-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  .att-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+  }
+  .att-btn--view {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+  }
+  .att-btn--view:hover {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+  }
+  .att-btn--download {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+  }
+  .att-btn--download:hover {
+    background: #16a34a;
+    color: white;
+    border-color: #16a34a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
 
   /* ============================================
      PRINT ATTACHMENT PREVIEWS (image / file card)
@@ -1053,6 +1290,10 @@
   .print-frame > thead, .print-frame > tfoot { display: none; }
 
   @media print {
+    /* Hide attachment inline cards & overlays from print */
+    .action-attachments-modern,
+    .att-modal-overlay { display: none !important; }
+
     html, body {
       width: auto !important;
       max-width: none !important;
@@ -1207,6 +1448,13 @@
         </div>
 
         <div class="ns-header__actions ">
+          <button type="button" onclick="openAttachmentsPanel()" class="btn btn--ghost" aria-label="View all attachments" id="btn-view-attachments" style="display:none;">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+            Attachments
+          </button>
+
           <button type="button" onclick="printNotesheet()" class="btn btn--ghost" aria-label="Print this notesheet">
             <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -1216,11 +1464,6 @@
             Print
           </button>
 
-          {% if "fozone" in request.user.username or "Fleet" in request.user.username or "fleet" in request.user.username or request.user.username in "Manager_Admin MngrFleet Fleet_Manager" %}
-          <button type="button" class="btn btn--ghost" onclick="openLogBookModal('{{ notesheet.id }}')" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: white;" aria-label="Attach Log Book History">
-            📚 Log Book History
-          </button>
-          {% endif %}
           {% if notesheet.assigned_to == request.user or notesheet.current_holder == request.user or notesheet.created_by == request.user %}
           <a href="{% url 'return_notesheet' pk=notesheet.id %}" class="btn btn--danger"
             aria-label="Return this notesheet">
@@ -1256,8 +1499,8 @@
         <div class="meta-item" role="listitem">
           <dt class="meta-item__label">Initiated By</dt>
           <dd class="meta-item__value" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
-            <span>{{ notesheet.created_by.username }}</span>
-            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">
+            <span class="sig-role-label" data-role="{{ notesheet.created_by.profile.role.code|default:notesheet.created_by.username }}"></span>
+            <span style="font-size: 0.75rem; color:#6b7280; font-weight: 500;">
               {{ notesheet.created_at|date:"d M Y, H:i A" }}
             </span>
           </dd>
@@ -1266,16 +1509,16 @@
         <div class="meta-item" role="listitem">
           <dt class="meta-item__label">Current Officer</dt>
           <dd class="meta-item__value {% if not notesheet.current_holder %}meta-item__value--muted{% endif %}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
-            <span>{{ notesheet.current_holder.username|default:"Unassigned" }}</span>
+            <span class="sig-role-label" data-role="{{ notesheet.current_holder.profile.role.code|default:notesheet.current_holder.username|default:'Unassigned' }}"></span>
             {% if notesheet.current_holder %}
               {% with last_fwd_dict=clean_forwards|last last_ret_dict=clean_returns|last %}
                 {% with last_fwd=last_fwd_dict.obj last_ret=last_ret_dict.obj %}
                   {% if last_fwd and last_fwd.forwarded_to == notesheet.current_holder %}
-                    <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Marked by: {{ last_fwd.forwarded_by.username }}</span>
+                    <span style="font-size: 0.75rem; color:#6b7280; font-weight: 500;">Marked by: <span class="sig-role-label" data-role="{{ last_fwd.forwarded_by.profile.role.code|default:last_fwd.forwarded_by.username }}"></span></span>
                   {% elif last_ret and last_ret.returned_to == notesheet.current_holder %}
-                    <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Returned by: {{ last_ret.returned_by.username }}</span>
+                    <span style="font-size: 0.75rem; color:#6b7280; font-weight: 500;">Returned by: <span class="sig-role-label" data-role="{{ last_ret.returned_by.profile.role.code|default:last_ret.returned_by.username }}"></span></span>
                   {% elif notesheet.created_by != notesheet.current_holder %}
-                    <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Marked by: {{ notesheet.created_by.username }}</span>
+                    <span style="font-size: 0.75rem; color:#6b7280; font-weight: 500;">Marked by: <span class="sig-role-label" data-role="{{ notesheet.created_by.profile.role.code|default:notesheet.created_by.username }}"></span></span>
                   {% endif %}
                 {% endwith %}
               {% endwith %}
@@ -1290,13 +1533,13 @@
             <time datetime="{{ notesheet.updated_at|date:'c' }}" style="font-size: 0.875rem; font-weight: 500;">
               {{ notesheet.updated_at|date:"d M Y, H:i" }}
             </time>
-            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">
+            <span style="font-size: 0.75rem; color:#6b7280; font-weight: 500;">
               {% if timeline %}
                 {% with last_event=timeline|last %}
                   {% if last_event.actor %}
-                    By {{ last_event.actor.username }}
+                    By <span class="sig-role-label" data-role="{{ last_event.actor.profile.role.code|default:last_event.actor.username }}"></span>
                   {% elif last_event.user %}
-                    By {{ last_event.user.username }}
+                    By <span class="sig-role-label" data-role="{{ last_event.user.profile.role.code|default:last_event.user.username }}"></span>
                   {% endif %}
                 {% endwith %}
               {% elif clean_forwards or clean_returns %}
@@ -1323,7 +1566,7 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 Seen
               </span>
-              <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+              <span style="font-size: 0.75rem; color:#6b7280; font-weight: 500; display: flex; align-items: center; gap: 5px;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <time datetime="{{ notesheet.seen_at|date:'c' }}">{{ notesheet.seen_at|date:"d M Y, H:i" }}</time>
               </span>
@@ -1391,9 +1634,14 @@
           {# Preview jaisi left black line: Subject + poora content is wrapper ke andar #}
           <div class="print-line">
           <div class="print-only-subject" style="display: none;">
-            <div class="ph-subject-row">
-              <div class="ph-subject">Subject: {{ notesheet.title }}</div>
-              <div class="ph-date">Date: {{ notesheet.created_at|date:"d M Y" }}</div>
+            <div style="text-align:right; font-family:Calibri,Arial,sans-serif; font-size:14pt; font-weight:600; color:#000; margin-bottom:12pt;">
+              Dated: {{ notesheet.created_at|date:"d/m/Y" }}
+            </div>
+            <div style="text-align:center; font-family:Calibri,Arial,sans-serif; font-size:22pt; font-weight:bold; color:#000; margin-bottom:16pt;">
+              <u>NOTE SHEET</u>
+            </div>
+            <div style="font-family:Calibri,Arial,sans-serif; font-size:18pt; font-weight:bold; color:#000; margin-bottom:18pt; text-transform:uppercase;">
+              SUBJECT:&nbsp;&nbsp;<u>{{ notesheet.title }}</u>
             </div>
           </div>
 
@@ -1508,7 +1756,7 @@
                           <div class="signature-stamp__img-wrap">
                             <img class="signature-stamp__img" src="{{ notesheet.created_by.profile.signature.url }}" alt="Signature">
                           </div>
-                          <div class="signature-stamp__name">{{ notesheet.created_by.get_full_name|default:notesheet.created_by.username }}</div>
+                          <div class="signature-stamp__name sig-role-label" data-role="{{ notesheet.created_by.profile.role.code|default:notesheet.created_by.username }}"></div>
                           <div class="signature-stamp__badge">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                             {{ notesheet.created_at|date:"d M Y · h:i A" }}
@@ -1632,7 +1880,7 @@
                             <div class="signature-stamp__img-wrap">
                               <img class="signature-stamp__img" src="{{ item.actor.profile.signature.url }}" alt="Signature">
                             </div>
-                            <div class="signature-stamp__name">{{ item.actor.get_full_name|default:item.actor.username }}</div>
+                            <div class="signature-stamp__name sig-role-label" data-role="{{ item.actor.profile.role.code|default:item.actor.username }}"></div>
                             <div class="signature-stamp__badge">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                               {{ item.action_date|date:"d M Y · h:i A" }}
@@ -1665,6 +1913,95 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ============================================
+   SIGNATURE ROLE LABEL FORMATTER
+   Converts role codes (e.g. MngrFleet, FO-ZoneD)
+   into readable display labels — same as header chip logic.
+   ============================================ */
+(function () {
+    var MAP = {
+        'CEO': 'CEO',
+        'PS': 'PS',
+        'CFO': 'CFO',
+        'GM-PROJ': 'GM Proj',
+        'GM-PMER': 'GM PMER',
+        'GM-OPS': 'GM Ops',
+        'GM-HR': 'GM HR',
+        'ZM-ZoneA': 'ZM Zone A',
+        'ZM-ZoneB': 'ZM Zone B',
+        'ZM-ZoneC': 'ZM Zone C',
+        'ZM-D': 'ZM Zone D',
+        'ZM-ZoneE': 'ZM Zone E',
+        'MngrFin': 'Mngr Fin',
+        'MngrBilling': 'Mngr Billing',
+        'MngrProj': 'Mngr Proj',
+        'MngrFleet': 'Mngr Fleet',
+        'MngrCLC': 'Mngr CLC',
+        'MngrMIS': 'Mngr MIS',
+        'MngrMedia': 'Mngr Media',
+        'MngrProc': 'Mngr Proc',
+        'MngrHr': 'Mngr HR',
+        'MngrOPS': 'Mngr OPS',
+        'MngrSWMHO': 'MngrSWM HO',
+        'MngrSWMZoneA': 'MngrSWM A',
+        'MngrSWMZoneB': 'MngrSWM B',
+        'MngrSWMZoneC': 'MngrSWM C',
+        'MngrSWMZoneD': 'MngrSWM D',
+        'MngrSWMZoneE': 'MngrSWM E',
+        'MngrWSA': 'MngrWS A',
+        'MngrWSB': 'MngrWS B',
+        'MngrWSC': 'MngrWS C',
+        'MngrWSD': 'MngrWS D',
+        'MngrWSE': 'MngrWS E',
+        'FO-ZoneA': 'FO Zone A',
+        'FO-ZoneB': 'FO Zone B',
+        'FO-ZoneC': 'FO Zone C',
+        'FO-ZoneD': 'FO Zone D',
+        'FO-ZoneE': 'FO Zone E',
+        'AM-Audit': 'AM Audit',
+        'AM-PMER-1': 'AM PMER 1',
+        'AM-PMER-2': 'AM PMER 2',
+        'AM-MIS': 'AM Database',
+        'AM-Billing-HO': 'AM Billing',
+        'AO-Finance-1': 'AO Finance 1',
+        'AO-Finance-2': 'AO Finance 2',
+        'AO-Finance-3': 'AO Finance 3',
+        'AM-CC-ZoneA': 'AM CC Zone A',
+        'AM-CC-ZoneB': 'AM CC Zone B',
+        'AM-CC-ZoneC': 'AM CC Zone C',
+        'AM-CC-ZoneD': 'AM CC Zone D',
+        'AM-CC-ZoneE': 'AM CC Zone E',
+        'AM-HR-ZoneA': 'AM HR Zone A',
+        'AM-HR-ZoneB': 'AM HR Zone B',
+        'AM-HR-ZoneC': 'AM HR Zone C',
+        'AM-HR-ZoneD': 'AM HR Zone D',
+        'AM-HR-ZoneE': 'AM HR Zone E',
+        'AM-Procurement': 'AM Proc HO',
+        'Auditor': 'CIA',
+        'IT-Officer': 'IT Officer',
+    };
+    function formatRole(code) {
+        if (!code) return code;
+        if (MAP[code]) return MAP[code];
+        // Fallback: insert space before uppercase letters (camelCase split)
+        return code.replace(/-/g, ' ').replace(/([A-Z])/g, ' $1').replace(/\s+/g, ' ').trim();
+    }
+    function applyLabels() {
+        document.querySelectorAll('.sig-role-label').forEach(function (el) {
+            var code = el.getAttribute('data-role') || '';
+            el.textContent = formatRole(code);
+        });
+    }
+    // Run immediately (script is at bottom of page, DOM already ready)
+    // Also hook DOMContentLoaded as safety net
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyLabels);
+    } else {
+        applyLabels();
+    }
+})();
+</script>
 <script>
 /* ============================================
    PRINT: attachments ka asal content render karo
@@ -1849,7 +2186,221 @@ function printAttachment(fileUrl, fileName) {
 function openLogBookModal(notesheetId) {
   // existing log book modal trigger logic stays wherever it was defined
 }
+
+/* ============================================
+   ATTACHMENTS PANEL
+   Collects all attachments from the page and
+   groups them by flag, showing individual download.
+   ============================================ */
+function openAttachmentsPanel() {
+    var overlay = document.getElementById('att-modal-overlay');
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAttachmentsPanel() {
+    var overlay = document.getElementById('att-modal-overlay');
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+}
+
+// Close on overlay click
+document.addEventListener('DOMContentLoaded', function() {
+    var overlay = document.getElementById('att-modal-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeAttachmentsPanel();
+        });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeAttachmentsPanel();
+    });
+
+    // Show Attachments button if there are any attachments on the page
+    var hasAtts = document.querySelectorAll('.att-data-item').length > 0;
+    if (hasAtts) {
+        var btn = document.getElementById('btn-view-attachments');
+        if (btn) btn.style.display = '';
+    }
+});
 </script>
+
+<div class="att-modal-overlay" id="att-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="att-modal-title">
+  <div class="att-modal">
+    <div class="att-modal__header">
+      <div class="att-modal__title" id="att-modal-title">
+        <div class="att-modal__title-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+        </div>
+        All Attachments
+      </div>
+      <button class="att-modal__close" onclick="closeAttachmentsPanel()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="att-modal__body">
+      {% with all_atts_exist=False %}
+      {% if initial_attachments or timeline %}
+        {% regroup initial_attachments by flag_name as flag_groups_initial %}
+        {% for group in flag_groups_initial %}
+          <div class="att-flag-group">
+            <div class="att-flag-header">
+              {% if group.grouper %}
+                {% if "Flag" in group.grouper %}
+                  <span class="att-flag-badge att-flag-badge--red">{{ group.grouper }}</span>
+                {% elif "Annexure" in group.grouper %}
+                  <span class="att-flag-badge att-flag-badge--green">{{ group.grouper }}</span>
+                {% elif "PUC" in group.grouper %}
+                  <span class="att-flag-badge att-flag-badge--blue">{{ group.grouper }}</span>
+                {% else %}
+                  <span class="att-flag-badge att-flag-badge--gray">{{ group.grouper }}</span>
+                {% endif %}
+              {% else %}
+                <span class="att-flag-badge att-flag-badge--gray">Attachment</span>
+                <span class="att-flag-name">General Attachments</span>
+              {% endif %}
+              <span class="att-flag-count">{{ group.list|length }} file{{ group.list|length|pluralize }}</span>
+            </div>
+            <div class="att-file-list">
+              {% for att in group.list %}
+                {% with fname=att.file.name|cut:"notesheet_attachments/" fname_lower=att.file.name|lower %}
+                <div class="att-file-item att-data-item">
+                  <div class="att-file-type-icon
+                    {% if '.pdf' in fname_lower %}att-file-type-icon--pdf
+                    {% elif '.docx' in fname_lower or '.doc' in fname_lower %}att-file-type-icon--word
+                    {% elif '.xlsx' in fname_lower or '.xls' in fname_lower or '.csv' in fname_lower %}att-file-type-icon--excel
+                    {% elif '.pptx' in fname_lower or '.ppt' in fname_lower %}att-file-type-icon--ppt
+                    {% elif '.png' in fname_lower or '.jpg' in fname_lower or '.jpeg' in fname_lower or '.gif' in fname_lower or '.webp' in fname_lower %}att-file-type-icon--img
+                    {% elif '.zip' in fname_lower or '.rar' in fname_lower %}att-file-type-icon--zip
+                    {% else %}att-file-type-icon--file{% endif %}">
+                    {% if '.pdf' in fname_lower %}PDF
+                    {% elif '.docx' in fname_lower or '.doc' in fname_lower %}DOC
+                    {% elif '.xlsx' in fname_lower or '.xls' in fname_lower or '.csv' in fname_lower %}XLS
+                    {% elif '.pptx' in fname_lower or '.ppt' in fname_lower %}PPT
+                    {% elif '.png' in fname_lower or '.jpg' in fname_lower or '.jpeg' in fname_lower or '.gif' in fname_lower or '.webp' in fname_lower %}IMG
+                    {% elif '.zip' in fname_lower or '.rar' in fname_lower %}ZIP
+                    {% else %}FILE{% endif %}
+                  </div>
+                  <div class="att-file-info">
+                    <div class="att-file-name">{{ fname }}</div>
+                    <div class="att-file-meta">
+                      {% if '.pdf' in fname_lower %}PDF Document
+                      {% elif '.docx' in fname_lower or '.doc' in fname_lower %}Word Document
+                      {% elif '.xlsx' in fname_lower or '.xls' in fname_lower or '.csv' in fname_lower %}Excel Spreadsheet
+                      {% elif '.pptx' in fname_lower or '.ppt' in fname_lower %}PowerPoint Presentation
+                      {% elif '.png' in fname_lower or '.jpg' in fname_lower or '.jpeg' in fname_lower or '.gif' in fname_lower or '.webp' in fname_lower %}Image File
+                      {% elif '.zip' in fname_lower or '.rar' in fname_lower %}Compressed Archive
+                      {% else %}Attached File{% endif %}
+                    </div>
+                  </div>
+                  <div class="att-file-actions">
+                    <a href="/view-document/?url={{ att.file.url|urlencode }}" target="_blank" class="att-btn att-btn--view"
+                       onclick="event.preventDefault(); previewAttachmentModal('/view-document/?url={{ att.file.url|urlencode }}', '{{ fname|escapejs }}');">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      View
+                    </a>
+                    <a href="{{ att.file.url }}" download="{{ fname }}" class="att-btn att-btn--download">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      Download
+                    </a>
+                  </div>
+                </div>
+                {% endwith %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        {% for item in timeline %}
+          {% if item.rich_attachments %}
+            {% regroup item.rich_attachments by flag_name as flag_groups_item %}
+            {% for group in flag_groups_item %}
+              <div class="att-flag-group">
+                <div class="att-flag-header">
+                  {% if group.grouper %}
+                    {% if "Flag" in group.grouper %}
+                      <span class="att-flag-badge att-flag-badge--red">{{ group.grouper }}</span>
+                    {% elif "Annexure" in group.grouper %}
+                      <span class="att-flag-badge att-flag-badge--green">{{ group.grouper }}</span>
+                    {% elif "PUC" in group.grouper %}
+                      <span class="att-flag-badge att-flag-badge--blue">{{ group.grouper }}</span>
+                    {% else %}
+                      <span class="att-flag-badge att-flag-badge--gray">{{ group.grouper }}</span>
+                    {% endif %}
+                  {% else %}
+                    <span class="att-flag-badge att-flag-badge--gray">Attachment</span>
+                    <span class="att-flag-name">General Attachments</span>
+                  {% endif %}
+                  <span class="att-flag-count">{{ group.list|length }} file{{ group.list|length|pluralize }}</span>
+                </div>
+                <div class="att-file-list">
+                  {% for att in group.list %}
+                    {% with fname=att.file.name|cut:"notesheet_attachments/" fname_lower=att.file.name|lower %}
+                    <div class="att-file-item att-data-item">
+                      <div class="att-file-type-icon
+                        {% if '.pdf' in fname_lower %}att-file-type-icon--pdf
+                        {% elif '.docx' in fname_lower or '.doc' in fname_lower %}att-file-type-icon--word
+                        {% elif '.xlsx' in fname_lower or '.xls' in fname_lower or '.csv' in fname_lower %}att-file-type-icon--excel
+                        {% elif '.pptx' in fname_lower or '.ppt' in fname_lower %}att-file-type-icon--ppt
+                        {% elif '.png' in fname_lower or '.jpg' in fname_lower or '.jpeg' in fname_lower or '.gif' in fname_lower or '.webp' in fname_lower %}att-file-type-icon--img
+                        {% elif '.zip' in fname_lower or '.rar' in fname_lower %}att-file-type-icon--zip
+                        {% else %}att-file-type-icon--file{% endif %}">
+                        {% if '.pdf' in fname_lower %}PDF
+                        {% elif '.docx' in fname_lower or '.doc' in fname_lower %}DOC
+                        {% elif '.xlsx' in fname_lower or '.xls' in fname_lower or '.csv' in fname_lower %}XLS
+                        {% elif '.pptx' in fname_lower or '.ppt' in fname_lower %}PPT
+                        {% elif '.png' in fname_lower or '.jpg' in fname_lower or '.jpeg' in fname_lower or '.gif' in fname_lower or '.webp' in fname_lower %}IMG
+                        {% elif '.zip' in fname_lower or '.rar' in fname_lower %}ZIP
+                        {% else %}FILE{% endif %}
+                      </div>
+                      <div class="att-file-info">
+                        <div class="att-file-name">{{ fname }}</div>
+                        <div class="att-file-meta">
+                          {% if '.pdf' in fname_lower %}PDF Document
+                          {% elif '.docx' in fname_lower or '.doc' in fname_lower %}Word Document
+                          {% elif '.xlsx' in fname_lower or '.xls' in fname_lower or '.csv' in fname_lower %}Excel Spreadsheet
+                          {% elif '.pptx' in fname_lower or '.ppt' in fname_lower %}PowerPoint Presentation
+                          {% elif '.png' in fname_lower or '.jpg' in fname_lower or '.jpeg' in fname_lower or '.gif' in fname_lower or '.webp' in fname_lower %}Image File
+                          {% elif '.zip' in fname_lower or '.rar' in fname_lower %}Compressed Archive
+                          {% else %}Attached File{% endif %}
+                          &nbsp;&bull;&nbsp;By {{ item.actor.username }}
+                        </div>
+                      </div>
+                      <div class="att-file-actions">
+                        <a href="/view-document/?url={{ att.file.url|urlencode }}" target="_blank" class="att-btn att-btn--view"
+                           onclick="event.preventDefault(); previewAttachmentModal('/view-document/?url={{ att.file.url|urlencode }}', '{{ fname|escapejs }}');">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          View
+                        </a>
+                        <a href="{{ att.file.url }}" download="{{ fname }}" class="att-btn att-btn--download">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          Download
+                        </a>
+                      </div>
+                    </div>
+                    {% endwith %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+
+      {% else %}
+        <div class="att-empty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5" style="margin-bottom:12px;"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          <p>No attachments found in this notesheet.</p>
+        </div>
+      {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+</div>
 
 {% include 'logbook_history_modal.html' %}
 {% endblock %}

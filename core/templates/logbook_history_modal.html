@@ -198,7 +198,7 @@
             </div>
             <div style="overflow:hidden;">
               <span style="color:#64748b; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; display:block;">VEHICLE</span>
-              <div style="font-weight:900; color:#0d2b1e; font-size:0.98rem; margin-top:1px; word-break:break-all;">${v.vehicle_number}</div>
+              <div style="font-weight:700; color:#0d2b1e; font-size:0.98rem; margin-top:1px; word-break:break-all;">${v.vehicle_number}</div>
             </div>
           </div>
 
@@ -237,82 +237,87 @@
         const summaryEl = document.getElementById('logbook_entries_summary');
         if (summaryEl) summaryEl.textContent = `Total Entries: ${data.total_entries}`;
 
-        // Render Page-by-Page Cards
+        // Render Page-by-Page Cards or Empty State Banner
         const container = document.getElementById('logbook_pages_container');
         container.innerHTML = '';
 
-        if (data.pages && data.pages.length > 0) {
+        if (!data.total_entries || data.total_entries === 0) {
+          container.innerHTML = `
+            <div style="background:#fef2f2; border:1.5px solid #fca5a5; border-radius:14px; padding:2.25rem 1.5rem; text-align:center; box-shadow:0 4px 14px rgba(220,38,38,0.05);">
+              <div style="width:56px; height:56px; background:#fee2e2; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; color:#dc2626; font-size:1.5rem; margin-bottom:0.85rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <h4 style="margin:0 0 0.35rem 0; color:#991b1b; font-weight:800; font-size:1.15rem; text-transform:uppercase; letter-spacing:0.02em;">Log Book Not Attached Yet</h4>
+              <p style="margin:0; color:#7f1d1d; font-size:0.9rem; font-weight:500;">No digital logbook maintenance records or entries have been uploaded for this vehicle.</p>
+            </div>
+          `;
+        } else if (data.pages && data.pages.length > 0) {
           data.pages.forEach(p => {
+            // Only render pages that have entries or if pages exist
+            if (!p.entries || p.entries.length === 0) return;
+
             const pageDiv = document.createElement('div');
             pageDiv.style.cssText = 'background:white; border:1.5px solid #cbd5e1; border-radius:14px; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,0.04);';
             
             let entriesTableHtml = '';
             let pdfViewerHtml = '';
 
-            if (p.entries && p.entries.length > 0) {
-              entriesTableHtml = `
-                <div style="overflow-x:auto;">
-                  <table style="width:100%; border-collapse:collapse; font-size:0.85rem; border-top:1.5px solid #0d2b1e;">
-                    <thead style="background:#0d2b1e; color:#ffffff; text-transform:uppercase; font-size:0.75rem; letter-spacing:0.04em;">
-                      <tr>
-                        <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:5%;">#</th>
-                        <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:20%;">Date</th>
-                        <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:35%;">Logbook / Vehicle Number</th>
-                        <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:40%;">Uploaded Document / File Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+            entriesTableHtml = `
+              <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.85rem; border-top:1.5px solid #0d2b1e;">
+                  <thead style="background:#0d2b1e; color:#ffffff; text-transform:uppercase; font-size:0.75rem; letter-spacing:0.04em;">
+                    <tr>
+                      <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:5%;">#</th>
+                      <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:20%;">Date</th>
+                      <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:35%;">Logbook / Vehicle Number</th>
+                      <th style="padding:10px 8px; font-weight:800; text-align:center; border:1px solid #0d2b1e; width:40%;">Uploaded Document / File Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+            `;
+
+            p.entries.forEach((e, idx) => {
+              const bg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
+              const fileHtml = e.file_url ? `
+                <span style="font-weight:600; color:#1e293b; word-break:break-all;"><i class="fas fa-paperclip me-1" style="color:#0284c7;"></i>${e.file_url.split('/').pop()}</span>
+              ` : '<span style="color:#94a3b8; font-style:italic;">No file uploaded</span>';
+
+              entriesTableHtml += `
+                <tr style="background:${bg};">
+                  <td style="padding:10px 8px; font-weight:700; text-align:center; vertical-align:top; border:1px solid #cbd5e1; color:#64748b;">${idx + 1}</td>
+                  <td style="padding:10px 8px; font-weight:700; text-align:center; vertical-align:top; border:1px solid #cbd5e1; white-space:nowrap; color:#0f172a;">${e.formatted_date}</td>
+                  <td style="padding:10px 8px; font-weight:700; vertical-align:top; border:1px solid #cbd5e1; color:#0d2b1e;"><i class="fas fa-book me-1" style="color:#059669;"></i> ${v.vehicle_number}</td>
+                  <td style="padding:10px 8px; vertical-align:top; border:1px solid #cbd5e1;">${fileHtml}</td>
+                </tr>
               `;
+            });
 
-              p.entries.forEach((e, idx) => {
-                const bg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
-                const fileHtml = e.file_url ? `
-                  <span style="font-weight:600; color:#1e293b; word-break:break-all;"><i class="fas fa-paperclip me-1" style="color:#0284c7;"></i>${e.file_url.split('/').pop()}</span>
-                ` : '<span style="color:#94a3b8; font-style:italic;">No file uploaded</span>';
+            entriesTableHtml += '</tbody></table></div>';
 
-                entriesTableHtml += `
-                  <tr style="background:${bg};">
-                    <td style="padding:10px 8px; font-weight:700; text-align:center; vertical-align:top; border:1px solid #cbd5e1; color:#64748b;">${idx + 1}</td>
-                    <td style="padding:10px 8px; font-weight:700; text-align:center; vertical-align:top; border:1px solid #cbd5e1; white-space:nowrap; color:#0f172a;">${e.formatted_date}</td>
-                    <td style="padding:10px 8px; font-weight:700; vertical-align:top; border:1px solid #cbd5e1; color:#0d2b1e;"><i class="fas fa-book me-1" style="color:#059669;"></i> ${v.vehicle_number}</td>
-                    <td style="padding:10px 8px; vertical-align:top; border:1px solid #cbd5e1;">${fileHtml}</td>
-                  </tr>
+            // Find first entry with a valid file_url to embed the full document viewer frame
+            const pdfEntry = p.entries.find(e => e.file_url);
+            if (pdfEntry && pdfEntry.file_url) {
+              const fileUrl = pdfEntry.file_url;
+              if (fileUrl.toLowerCase().includes('.pdf')) {
+                pdfViewerHtml = `
+                  <div style="padding: 16px; background: #ffffff; border-top: 2px solid #0d2b1e;">
+                    <div style="border: 2px solid #cbd5e1; border-radius: 14px; overflow: hidden; background: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+                      <object data="${fileUrl}#zoom=70&navpanes=0" type="application/pdf" width="100%" height="750px" style="display: block;">
+                        <embed src="${fileUrl}#zoom=70&navpanes=0" type="application/pdf" width="100%" height="750px" />
+                        <iframe src="${fileUrl}#zoom=70&navpanes=0" width="100%" height="750px" style="border: none;"></iframe>
+                      </object>
+                    </div>
+                  </div>
                 `;
-              });
-
-              entriesTableHtml += '</tbody></table></div>';
-
-              // Find first entry with a valid file_url to embed the full document viewer frame
-              const pdfEntry = p.entries.find(e => e.file_url);
-              if (pdfEntry && pdfEntry.file_url) {
-                const fileUrl = pdfEntry.file_url;
-                if (fileUrl.toLowerCase().includes('.pdf')) {
-                  pdfViewerHtml = `
-                    <div style="padding: 16px; background: #ffffff; border-top: 2px solid #0d2b1e;">
-                      <div style="border: 2px solid #cbd5e1; border-radius: 14px; overflow: hidden; background: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
-                        <object data="${fileUrl}#zoom=70&navpanes=0" type="application/pdf" width="100%" height="750px" style="display: block;">
-                          <embed src="${fileUrl}#zoom=70&navpanes=0" type="application/pdf" width="100%" height="750px" />
-                          <iframe src="${fileUrl}#zoom=70&navpanes=0" width="100%" height="750px" style="border: none;"></iframe>
-                        </object>
-                      </div>
+              } else {
+                pdfViewerHtml = `
+                  <div style="padding: 16px; background: #ffffff; border-top: 2px solid #0d2b1e; text-align: center;">
+                    <div style="background: #ffffff; padding: 18px; border-radius: 14px; border: 2px solid #cbd5e1; box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
+                      <img src="${fileUrl}" alt="Logbook Document Page" style="max-width: 100%; max-height: 750px; border-radius: 10px; object-fit: contain;">
                     </div>
-                  `;
-                } else {
-                  pdfViewerHtml = `
-                    <div style="padding: 16px; background: #ffffff; border-top: 2px solid #0d2b1e; text-align: center;">
-                      <div style="background: #ffffff; padding: 18px; border-radius: 14px; border: 2px solid #cbd5e1; box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
-                        <img src="${fileUrl}" alt="Logbook Document Page" style="max-width: 100%; max-height: 750px; border-radius: 10px; object-fit: contain;">
-                      </div>
-                    </div>
-                  `;
-                }
+                  </div>
+                `;
               }
-            } else {
-              entriesTableHtml = `
-                <div style="padding:16px 20px; color:#64748b; font-style:italic; font-size:0.88rem; background:#fafafa;">
-                  Log Book Page ${p.page_number} exists, but no entries have been recorded yet.
-                </div>
-              `;
             }
 
             pageDiv.innerHTML = `
@@ -497,7 +502,7 @@
           .then(res => { if (!res.ok) throw new Error(); return res.arrayBuffer(); })
           .then(buffer => mammoth.convertToHtml({arrayBuffer: buffer}))
           .then(result => {
-              container.innerHTML = `<div style="padding:40px; background:white; color:black; height:100%; overflow:auto; font-family:'Times New Roman', Times, serif; font-size:12pt; line-height:1.6; box-sizing:border-box;">${result.value}</div>`;
+              container.innerHTML = `<div style="padding:40px; background:white; color:black; height:100%; overflow:auto; font-family:Calibri,Arial,sans-serif; font-size:12pt; line-height:1.6; box-sizing:border-box;">${result.value}</div>`;
           })
           .catch(err => {
               container.innerHTML = getDownloadHtml('docx', url, 'Failed to parse Word document. The file might be corrupted or in an unsupported format.');

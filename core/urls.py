@@ -54,7 +54,6 @@ urlpatterns = [
     # NOTESHEET SYSTEM URLs
     # =========================================================
     path('notesheet/initiate/', views.initiate_notesheet, name='initiate_notesheet'),
-    path('notesheet/my/', views.my_notesheets, name='my_notesheets'),
     path('notesheet/inbox/', views.notesheet_inbox, name='notesheet_inbox'),
     path('notesheet/outbox/', views.notesheet_outbox, name='notesheet_outbox'),
     path('notesheet/view/<int:task_id>/', views.view_notesheet, name='view_notesheet'),
@@ -84,6 +83,7 @@ urlpatterns = [
     path('letters/reply/<int:letter_id>/', views.reply_letter, name='reply_letter'),
     path('letters/view-reply/<int:letter_id>/', views.view_letter_reply, name='view_letter_reply'),
     path('profile/signature/', views.edit_profile_signature, name='edit_profile_signature'),
+    path('profile/signature/check/', views.check_user_signature, name='check_user_signature'),
 
     # =========================================================
     # NOTIFICATIONS URL

@@ -183,7 +183,7 @@ class Commitment(models.Model):
 # =========================================================
 class File(models.Model):
     file_name = models.CharField(max_length=255)
-    file_number = models.CharField(max_length=100, unique=True)
+    file_number = models.CharField(max_length=100, unique=True, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -597,6 +597,13 @@ class VehicleRequisitionForward(models.Model):
     remark = models.TextField(blank=True)
     status_at_forward = models.CharField(max_length=20, blank=True, default='Pending')
     forwarded_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    # Attachments (only for fleet officers - fzoned users)
+    attachment_1 = models.FileField(upload_to='requisition_remark_attachments/', blank=True, null=True)
+    attachment_2 = models.FileField(upload_to='requisition_remark_attachments/', blank=True, null=True)
+    attachment_3 = models.FileField(upload_to='requisition_remark_attachments/', blank=True, null=True)
+    attachment_4 = models.FileField(upload_to='requisition_remark_attachments/', blank=True, null=True)
+    attachment_5 = models.FileField(upload_to='requisition_remark_attachments/', blank=True, null=True)
+    is_fleet_officer_remark = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-forwarded_at']

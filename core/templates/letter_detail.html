@@ -133,7 +133,7 @@
         border: 1px solid var(--border);
         border-radius: 4px;
         font-family: 'Times New Roman', Times, serif;
-        color: #000;
+        color:#6b7280;
         min-height: 297mm;
         /* A4 height reference */
         animation: letter-rise .35s ease-out;
@@ -186,11 +186,11 @@
     }
 
     .letterhead-title {
-        font-weight: 900;
+        font-weight:700;
         font-size: 26px;
         margin: 0 0 5pt 0;
         font-family: 'Times New Roman', Times, serif;
-        color: #000;
+        color:#6b7280;
         line-height: 1.35;
         text-transform: uppercase;
         text-decoration: underline;
@@ -204,17 +204,17 @@
         font-weight: 700;
         margin: 0 0 3pt 0;
         font-family: 'Times New Roman', Times, serif;
-        color: #000;
+        color:#6b7280;
         line-height: 1.35;
         text-transform: uppercase;
     }
 
     .letterhead-contact {
-        font-size: 18px;
+        font-size:24px;
         font-weight: 600;
         margin: 0;
         font-family: 'Times New Roman', Times, serif;
-        color: #000;
+        color:#6b7280;
         line-height: 1.35;
     }
 
@@ -246,7 +246,7 @@
         line-height: 1.7;
         padding: 10px 0;
         min-height: 300px;
-        color: #000;
+        color:#6b7280;
     }
 
     /* Auto-numbering for nested list items: 1. / (i) (ii) (iii) */
@@ -329,7 +329,7 @@
     .signature-name {
         font-weight: 700;
         font-size: 16px;
-        color: #000;
+        color:#6b7280;
         text-transform: uppercase;
         letter-spacing: 0.3px;
     }
@@ -337,14 +337,14 @@
     .signature-designation {
         font-weight: 700;
         font-size: 15px;
-        color: #000;
+        color:#6b7280;
         margin-top: 2px;
     }
 
     .signature-org {
         font-weight: 700;
         font-size: 15px;
-        color: #000;
+        color:#6b7280;
         margin-top: 2px;
     }
 
@@ -361,7 +361,7 @@
         white-space: pre-line;
         line-height: 1.6;
         font-family: 'Times New Roman', Times, serif;
-        color: #000;
+        color:#6b7280;
     }
 
     /* ---------- Attachment card ---------- */
@@ -376,7 +376,7 @@
     /* ---------- Footer ---------- */
     .letter-footer-note {
         font-size: 10.5px;
-        color: #6b7280;
+        color:#6b7280;
         text-align: center;
         margin-top: 40px;
         padding-top: 14px;
@@ -625,7 +625,7 @@
             <!-- CC / Copy Forwarded -->
             {% if letter.cc_list %}
             <div class="mt-5 cc-box">
-                <strong style="font-family: 'Times New Roman', Times, serif; color: #000; font-size: 16px;">Copy forwarded for information to the:</strong>
+                <strong style="font-family: 'Times New Roman', Times, serif; color:#6b7280; font-size: 16px;">Copy forwarded for information to the:</strong>
                 <div class="cc-list-card">{{ letter.cc_list }}</div>
             </div>
 

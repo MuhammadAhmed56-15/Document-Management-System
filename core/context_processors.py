@@ -23,10 +23,7 @@ def unread_notesheets(request):
             if request.user.profile.role.category in ['ZM', 'Manager', 'GM', 'CEO'] or request.user.profile.role.code in ['Manager_Admin', 'Fleet_Manager', 'MngrFleet']:
                 is_manager = True
                 
-        if is_manager:
-            requisitions_count = VehicleRequisition.objects.filter(manager_admin=request.user).exclude(status__in=['Completed', 'Rejected']).count()
-        else:
-            requisitions_count = 0
+        requisitions_count = VehicleRequisition.objects.filter(manager_admin=request.user).exclude(status__in=['Completed', 'Rejected']).count()
             
         commitments_count = Commitment.objects.filter(
             invited_managers=request.user,

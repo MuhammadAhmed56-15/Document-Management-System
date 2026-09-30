@@ -702,14 +702,27 @@
   }
 
   .signature-stamp-box__name {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #0d2b1e;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    min-width: 160px;
+  }
+
+  .signature-stamp-box__designation {
+    font-size: 0.82rem;
     font-weight: 700;
-    font-size: 1.2rem;
-    color: #111827;
+    color: #047857;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.1rem;
   }
 
   .signature-stamp-box__role {
-    font-size: 0.85rem;
-    color: #4b5563;
+    font-size: 0.78rem;
+    color:#6b7280;
+    font-style: italic;
     margin-bottom: 0.2rem;
   }
 
@@ -717,12 +730,20 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.4rem 0.8rem;
+    padding: 0.35rem 0.75rem;
     background: #eef8f3;
     color: #0f9d58;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     border-radius: 6px;
+    border: 1px solid #d1fae5;
+  }
+
+  @media print {
+    .signature-stamp-box { break-inside: avoid; }
+    .signature-stamp-box__name { font-size: 0.92rem; border-top: 1.5px solid #000; color:#6b7280; }
+    .signature-stamp-box__designation { font-size: 0.78rem; color:#6b7280; }
+    .signature-stamp-box__role { font-size: 0.72rem; }
   }
 
   .signature-missing-box {
@@ -1140,7 +1161,7 @@
               {% else %}
               <div class="signature-missing-box">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                <span>No saved signature found on your profile. <a href="{% url 'edit_profile_signature' %}?next={{ request.path }}">Add your digital signature</a> once to have it auto-stamped on every notesheet.</span>
+                <span>No saved signature found on your profile. <a href="{% url 'edit_profile_signature' %}?next={{ request.path }}" onclick="saveDraftBeforeSignature()">Add your digital signature</a> once to have it auto-stamped on every notesheet.</span>
               </div>
               {% endif %}
             </div>
@@ -1504,7 +1525,15 @@
             // ║ PROFESSIONAL LETTERHEAD - AUTOMATIC INJECTION                ║
             // ╚═══════════════════════════════════════════════════════════════╝
             const currentContent = editor.getContent({ format: 'text' }).trim();
-            if (!currentContent) {
+            if (sessionStorage.getItem('returning_from_signature') === 'true') {
+              const draftKey = 'draft_return_notesheet_{{ notesheet.id }}';
+              const savedDraft = sessionStorage.getItem(draftKey);
+              if (savedDraft) {
+                editor.setContent(savedDraft);
+              }
+              sessionStorage.removeItem('returning_from_signature');
+              sessionStorage.removeItem(draftKey);
+            } else if (!currentContent) {
               {% if request.user.profile.zone %}
                 const isZoneUser = true;
                 const zoneTitle = '{{ request.user.profile.zone.title|escapejs|default:"WATER &amp; SANITATION SERVICES PESHAWAR" }}';
@@ -1538,11 +1567,11 @@
                 '<img src="' + wsspLogo + '" onerror="this.style.display=\'none\'" alt="Left Logo" style="width:135px;height:135px;max-width:100%;object-fit:contain;' + imgFilter + '">' +
                 '</td>' +
                 '<td style="width:68%;text-align:center;vertical-align:middle;padding:6pt 8pt;">' +
-                '<h4 style="font-weight:700;font-size:34px;margin:0 0 5pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;">' + titleHtml + '</h4>' +
-                (zoneSubtitle ? '<p style="font-size:24px;font-weight:700;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;margin:0 0 3pt 0;">' + zoneSubtitle + '</p>' : '') +
-                (zoneProvince ? '<p style="font-size:18px;font-weight:700;margin:0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">' + zoneProvince + '</p>' : '') +
+                '<h4 style="font-weight:700;font-size:28px;margin:0 0 4pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;">' + titleHtml + '</h4>' +
+                (zoneSubtitle ? '<p style="font-size:22px;font-weight:700;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;margin:0 0 3pt 0;">' + zoneSubtitle + '</p>' : '') +
+                (zoneProvince ? '<p style="font-size:20px;font-weight:700;margin:0 0 2pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">' + zoneProvince + '</p>' : '') +
                 (zoneAddress ? '<p style="font-size:16px;font-weight:600;margin:0 0 4pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">' + zoneAddress + '</p>' : '') +
-                (zonePhone ? '<p style="font-size:16px;font-weight:700;margin:3pt 0 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">Phone: ' + zonePhone + '</p>' : '') +
+                (zonePhone && zonePhone !== 'None' && zonePhone.toLowerCase() !== 'none' ? '<p style="font-size:21px;font-weight:700;margin:3pt 0 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">Phone: ' + zonePhone + '</p>' : '') +
                 '</td>' +
                 '<td style="width:16%;text-align:center;vertical-align:middle;padding:6pt 4pt;">' +
                 '<img src="' + kpkLogo + '" onerror="this.style.display=\'none\'" alt="Right Logo" style="width:135px;height:135px;max-width:100%;object-fit:contain;' + imgFilter + '">' +
@@ -1551,7 +1580,7 @@
                 '</table>' +
                 '</div>' +
                 '<hr style="border:none;border-top:1px solid #e5e7eb;margin:2pt 0 8pt 0;padding:0;" />' +
-                '<ol start="{{ next_para_num|default:1 }}" style="font-family: Calibri, sans-serif; font-size: 15px; margin-top: 10px;"><li><br data-mce-bogus="1"></li></ol>'
+                '<p style="font-family: Calibri, sans-serif; font-size: 15px; margin-top: 10px;"><br data-mce-bogus="1"></p>'
               );
               editor.selection.select(editor.getBody(), true);
               editor.selection.collapse(false);
@@ -1733,6 +1762,7 @@
     {% if request.user.profile.zone %}
       const _zoneTitle = '{{ request.user.profile.zone.title|escapejs }}';
       const _zoneSubtitle = '{{ request.user.profile.zone.subtitle|escapejs }}';
+      const _zoneProvince = '{{ request.user.profile.zone.province|escapejs }}';
       const _zoneAddress = '{{ request.user.profile.zone.address|escapejs }}';
       const _zonePhone = '{{ request.user.profile.zone.phone|escapejs|default:"" }}';
       const _wsspLogo = '{% if request.user.profile.zone.logo_left %}{{ request.user.profile.zone.logo_left.url|escapejs }}{% else %}/static/images/wssp_logo_new.png{% endif %}';
@@ -1740,6 +1770,7 @@
     {% else %}
       const _zoneTitle = 'WATER AND SANITATION SERVICES PESHAWAR';
       const _zoneSubtitle = 'LOCAL GOVERNMENT COMPLEX, KHYBER PAKHTUNKHWA.';
+      const _zoneProvince = '';
       const _zoneAddress = 'Plot # 33, Street No. 13, Sector E-8, Phase-VII, Hayatabad';
       const _zonePhone = '';
       const _wsspLogo = '/static/images/wssp_logo_new.png';
@@ -1755,10 +1786,11 @@
            alt="Left Logo" style="width:135px;height:135px;max-width:100%;object-fit:contain;">
     </td>
     <td style="width:68%;text-align:center;vertical-align:middle;padding:6pt 8pt;">
-      <h4 style="font-weight:700;font-size:34px;margin:0 0 5pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;"><u style="text-decoration: underline; text-underline-offset: 4px;">${_zoneTitle}</u></h4>
-      <p style="font-size:24px;font-weight:700;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;margin:0 0 3pt 0;">${_zoneSubtitle}</p>
-      <p style="font-size:18px;font-weight:700;margin:0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">${_zoneAddress}</p>
-      ${_zonePhone ? '<p style="font-size:16px;font-weight:700;margin:3pt 0 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">Phone: ' + _zonePhone + '</p>' : ''}
+      <h4 style="font-weight:700;font-size:28px;margin:0 0 4pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;"><u style="text-decoration: underline; text-underline-offset: 4px;">${_zoneTitle}</u></h4>
+      <p style="font-size:22px;font-weight:700;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;margin:0 0 3pt 0;">${_zoneSubtitle}</p>
+      ${_zoneProvince ? '<p style="font-size:20px;font-weight:700;margin:0 0 2pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">' + _zoneProvince + '</p>' : ''}
+      ${_zoneAddress ? '<p style="font-size:14px;font-weight:600;margin:0 0 2pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">' + _zoneAddress + '</p>' : ''}
+      ${_zonePhone && _zonePhone !== 'None' && _zonePhone.toLowerCase() !== 'none' ? '<p style="font-size:21px;font-weight:700;margin:3pt 0 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">Phone: ' + _zonePhone + '</p>' : ''}
     </td>
     <td style="width:16%;text-align:center;vertical-align:middle;padding:6pt 4pt;">
       <img src="${_kpkLogo}"
@@ -1768,6 +1800,24 @@
   </tr>
 </table>
 <div style="border-top:2px solid #d1d5db;margin:6pt 0 14pt 0;"></div>`;
+
+    const subjectVal = "{{ notesheet.title|escapejs }}";
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    const todayStr = `${dd}/${mm}/${yyyy}`;
+
+    const subjectBlock = `
+<div style="text-align:right; font-family:Calibri,Arial,sans-serif; font-size:14pt; font-weight:600; color:#000; margin-bottom:12pt;">
+  Dated: ${todayStr}
+</div>
+<div style="text-align:center; font-family:Calibri,Arial,sans-serif; font-size:22pt; font-weight:bold; color:#000; margin-bottom:16pt;">
+  <u>NOTE SHEET</u>
+</div>
+<div style="font-family:Calibri,Arial,sans-serif; font-size:18pt; font-weight:bold; color:#000; margin-bottom:18pt;">
+  SUBJECT:&nbsp;&nbsp;<u>${(subjectVal || '').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</u>
+</div>`;
 
     const iframeDoc = `<!DOCTYPE html>
 <html lang="en">
@@ -1807,6 +1857,7 @@
 </head>
 <body>
 ${letterhead}
+${subjectBlock}
 <div style="border-left: 2.5px solid #000; padding-left: 14pt; margin-left: 6pt; flex: 1;">
 ${remarkContent || '<p style="color:#9ca3af;">(No remarks entered)</p>'}
 </div>
@@ -1874,9 +1925,9 @@ ${remarkContent || '<p style="color:#9ca3af;">(No remarks entered)</p>'}
       <img src="${window.location.origin}/static/images/wssp_logo_new.png" alt="WSSP Logo" draggable="false" style="width:135px;height:135px;object-fit:contain;user-select:none;" />
     </td>
     <td style="width:68%;text-align:center;vertical-align:middle;padding:6pt 8pt;">
-      <h4 style="font-weight:700;font-size:34px;margin:0 0 5pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;"><u style="text-decoration: underline; text-underline-offset: 4px;">WATER AND SANITATION SERVICES PESHAWAR</u></h4>
-      <p style="font-size:24px;font-weight:700;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;margin:0 0 3pt 0;">LOCAL GOVERNMENT COMPLEX, KHYBER PAKHTUNKHWA.</p>
-      <p style="font-size:18px;font-weight:700;margin:0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">Plot # 33, Street No. 13, Sector E-8, Phase-VII, Hayatabad</p>
+      <h4 style="font-weight:700;font-size:28px;margin:0 0 4pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;"><u style="text-decoration: underline; text-underline-offset: 4px;">WATER AND SANITATION SERVICES PESHAWAR</u></h4>
+      <p style="font-size:22px;font-weight:700;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;text-transform:uppercase;margin:0 0 3pt 0;">LOCAL GOVERNMENT COMPLEX, KHYBER PAKHTUNKHWA.</p>
+      <p style="font-size:20px;font-weight:700;margin:0 0 2pt 0;font-family:Calibri,Arial,sans-serif;color:#6b7280;line-height:1.35;word-wrap:break-word;">Plot # 33, Street No. 13, Sector E-8, Phase-VII, Hayatabad</p>
     </td>
     <td style="width:145px;text-align:center;vertical-align:middle;padding:12pt 0 12pt 10pt;">
       <img src="${window.location.origin}/static/images/kpk_emblem.png" alt="KPK Emblem" draggable="false" style="width:135px;height:135px;object-fit:contain;user-select:none;" />
@@ -1884,6 +1935,23 @@ ${remarkContent || '<p style="color:#9ca3af;">(No remarks entered)</p>'}
   </tr>
 </table>
 <hr style="border:none;border-top:3px solid #9a3a3a;margin:6pt 0 12pt 0;padding:0;" />`;
+
+    const printSubjectVal = "{{ notesheet.title|escapejs }}";
+    const printToday = new Date();
+    const p_dd = String(printToday.getDate()).padStart(2, '0');
+    const p_mm = String(printToday.getMonth() + 1).padStart(2, '0');
+    const p_yyyy = printToday.getFullYear();
+    const printDateStr = `${p_dd}/${p_mm}/${p_yyyy}`;
+    const printSubjectBlock = `
+<div style="text-align:right; font-family:Calibri,Arial,sans-serif; font-size:14pt; font-weight:600; color:#000; margin-bottom:12pt;">
+  Dated: ${printDateStr}
+</div>
+<div style="text-align:center; font-family:Calibri,Arial,sans-serif; font-size:22pt; font-weight:bold; color:#000; margin-bottom:16pt;">
+  <u>NOTE SHEET</u>
+</div>
+<div style="font-family:Calibri,Arial,sans-serif; font-size:18pt; font-weight:bold; color:#000; margin-bottom:18pt;">
+  SUBJECT:&nbsp;&nbsp;<u>${printSubjectVal.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</u>
+</div>`;
 
     const printWindow = window.open('', '_blank', 'width=900,height=700');
 
@@ -1964,6 +2032,7 @@ ${remarkContent || '<p style="color:#9ca3af;">(No remarks entered)</p>'}
   </div>
   <div class="letter-content">
     ${letterhead}
+    ${printSubjectBlock}
     <div style="border-left: 2.5px solid #000; padding-left: 14pt; margin-left: 6pt; flex: 1;">
       ${remarkContent}
     </div>
@@ -1980,6 +2049,14 @@ ${remarkContent || '<p style="color:#9ca3af;">(No remarks entered)</p>'}
 
     printWindow.document.close();
   });
+
+  function saveDraftBeforeSignature() {
+    if (typeof tinymce !== 'undefined' && tinymce.get('remark')) {
+      const draftKey = 'draft_return_notesheet_{{ notesheet.id }}';
+      sessionStorage.setItem(draftKey, tinymce.get('remark').getContent());
+      sessionStorage.setItem('returning_from_signature', 'true');
+    }
+  }
 
 </script>
 

@@ -172,7 +172,7 @@
     
     .paper-form-header p {
         margin: 8px 0 0;
-        font-size: 18px;
+        font-size:24px;
         font-style: italic;
     }
     
@@ -553,7 +553,7 @@
     }
     .vdp-item-sub {
         font-size: 11px;
-        color: #6b7280;
+        color:#000;
         font-weight: 400;
     }
     .vdp-separator {
@@ -682,10 +682,10 @@
                                         alt="WSSP" style="width:130px;height:130px;max-width:100%;object-fit:contain;">
                                 </td>
                                 <td style="width:64%;text-align:center;vertical-align:middle;padding:6pt 8pt;">
-                                    <h4 style="font-weight:900;font-size:clamp(15px, 1.6vw, 26px);margin:0 0 5pt 0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.25;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap;">OFFICE OF THE ZONAL MANAGER (ZONE-D)</h4>
-                                    <h4 style="font-weight:800;font-size:clamp(14px, 1.5vw, 21px);margin:0 0 3pt 0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.35;word-wrap:break-word;">WATER & SANITATION SERVICES PESHAWAR</h4>
-                                    <p style="font-size:clamp(13px, 1.4vw, 20px);font-weight:700;margin:0 0 2pt 0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.35;text-transform:uppercase;">GOVERNMENT OF KHYBER PAKHTUNKHWA</p>
-                                    <p style="font-size:clamp(12px, 1.3vw, 18px);font-weight:600;margin:0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.35;">House No: 23F, Khushal Khan Khattak Road, University Town, Peshawar</p>
+                                    <h4 style="font-weight:900;font-size:clamp(15px, 1.6vw, 26px);margin:0 0 5pt 0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.25;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap;">OFFICE OF THE ZONAL MANAGER (ZONE-D)</h4>
+                                    <h4 style="font-weight:800;font-size:clamp(14px, 1.5vw, 21px);margin:0 0 3pt 0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.35;word-wrap:break-word;">WATER & SANITATION SERVICES PESHAWAR</h4>
+                                    <p style="font-size:clamp(13px, 1.4vw, 20px);font-weight:700;margin:0 0 2pt 0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.35;text-transform:uppercase;">GOVERNMENT OF KHYBER PAKHTUNKHWA</p>
+                                    <p style="font-size:clamp(12px, 1.3vw, 18px);font-weight:600;margin:0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.35;">House No: 23F, Khushal Khan Khattak Road, University Town, Peshawar</p>
                                 </td>
                                 <td style="width:18%;text-align:center;vertical-align:middle;padding:6pt 4pt;">
                                     <img src="{% if request.user.profile.zone and request.user.profile.zone.logo_right %}{{ request.user.profile.zone.logo_right.url }}{% else %}{% static 'images/kpk_emblem.png' %}{% endif %}"
@@ -695,7 +695,7 @@
                         </table>
                         <div style="border-top:1px solid #000;margin:6pt 0 10pt 0;"></div>
                         
-                        <div class="text-center" style="font-size: 18px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <div class="text-center" style="font-size:24px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
                             To, &nbsp;&nbsp;&nbsp;The Zonal Manager, Water & Sanitation Services,
                             <span style="display: inline-block; width: 200px;">
                                 <select id="id_zone" name="zone" class="form-input-line" required>
@@ -708,12 +708,12 @@
                             , Peshawar.
                         </div>
                         
-                        <div class="text-center mb-4 mt-1" style="font-size: 18px; font-weight: bold;">
+                        <div class="text-center mb-4 mt-1" style="font-size:24px; font-weight: bold;">
                             Respected Sir!
                         </div>
                         
                         <!-- Line 1: vehicle number + UC route -->
-                        <div style="display:flex; align-items:flex-end; gap:8px; font-size:18px; margin-bottom:6px; flex-wrap:nowrap;">
+                        <div style="display:flex; align-items:flex-end; gap:8px; font-size:24px; margin-bottom:6px; flex-wrap:nowrap;">
                             <span style="white-space:nowrap; flex-shrink:0;">It is respectfully submitted that vehicle number</span>
                             <span style="flex: 2 1 220px; min-width:180px; position:relative;">
 
@@ -759,7 +759,7 @@
                         </div>
 
                         <!-- Line 2: has the following issues -->
-                        <div style="font-size:18px; margin-bottom:18px;">
+                        <div style="font-size:24px; margin-bottom:18px;">
                             has the following issues:
                         </div>
                         
@@ -783,13 +783,13 @@
                             </div>
                         </div>
                         
-                        <div class="form-paragraph mb-4" style="font-size: 18px; line-height: 2.2;">
+                        <div class="form-paragraph mb-4" style="font-size:24px; line-height: 2.2;">
                             The above-mentioned problem(s) was resolved before on 
                             <span style="display: inline-block; width: 180px;">{{ form.previous_issue_date }}</span>. 
                             Therefore, you are requested to kindly issue orders to resolve the above-mentioned problem(s).
                         </div>
 
-                        <div class="form-paragraph mb-4" style="font-size: 18px;">
+                        <div class="form-paragraph mb-4" style="font-size:24px;">
                             <!-- No 'for' attribute — prevents native label-checkbox double toggle -->
                             <label onclick="toggleFirstTime()" style="
                                 display: flex;
@@ -865,7 +865,7 @@
                             });
                         </script>
                         
-                        <div class="form-paragraph mb-5" style="font-size: 18px;">
+                        <div class="form-paragraph mb-5" style="font-size:24px;">
                             <strong>Estimated Cost (if any):</strong> 
                             <span style="display: inline-block; width: 250px;">{{ form.estimated_cost }}</span>
                         </div>
@@ -887,18 +887,18 @@
 
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
                                     <div style="flex: 1; display: flex; align-items: flex-end;">
-                                        <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">Driver Name:</span>
+                                        <span class="form-label-custom" style="font-size:24px; font-weight: normal;">Driver Name:</span>
                                         <span style="flex: 1; margin-right: 30px;">{{ form.driver_name }}</span>
                                     </div>
                                 </div>
                                 
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
                                     <div style="flex: 1; display: flex; align-items: flex-end;">
-                                        <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">Mobile Number:</span>
+                                        <span class="form-label-custom" style="font-size:24px; font-weight: normal;">Mobile Number:</span>
                                         <span style="flex: 1; margin-right: 30px;">{{ form.driver_mobile }}</span>
                                     </div>
                                     <div style="flex: 1; display: flex; align-items: flex-end;">
-                                        <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">Date:</span>
+                                        <span class="form-label-custom" style="font-size:24px; font-weight: normal;">Date:</span>
                                         <div style="flex: 1; position: relative;">
                                             <input type="date"
                                                    id="requisition_date_input"
@@ -919,7 +919,7 @@
                                 </div>
                                 
                                 <div style="display: flex; align-items: flex-end; width: 50%; margin-bottom: 25px;">
-                                    <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">CNIC Number:</span>
+                                    <span class="form-label-custom" style="font-size:24px; font-weight: normal;">CNIC Number:</span>
                                     <span style="flex: 1;">{{ form.driver_cnic }}</span>
                                 </div>
                             </div>
@@ -950,7 +950,7 @@
                                         <img src="{{ request.user.profile.signature.url }}" alt="Fleet Officer Signature" style="max-height: 80px; max-width: 100%;">
                                     </div>
                                 {% endif %}
-                                <div class="mt-2" style="font-style: italic; font-size: 18px;">{{ request.user.username }}</div>
+                                <div class="mt-2" style="font-style: italic; font-size:24px;">{{ request.user.username }}</div>
                                 <div class="signature-line">Fleet Officer Signature</div>
                             </div>
                         </div>
@@ -1006,7 +1006,7 @@
                                 </svg>
                             </div>
                             <p style="font-family:var(--font-sans); font-weight:600; color:#065f46; font-size:0.97rem; margin:0 0 4px;">Drag &amp; drop files here</p>
-                            <p style="font-family:var(--font-sans); font-size:0.8rem; color:#6b7280; margin:0;">or <span style="color:#059669;font-weight:600;text-decoration:underline;cursor:pointer;">click to browse</span></p>
+                            <p style="font-family:var(--font-sans); font-size:0.8rem; color:#000; margin:0;">or <span style="color:#059669;font-weight:600;text-decoration:underline;cursor:pointer;">click to browse</span></p>
                             <p style="font-family:var(--font-sans); font-size:0.75rem; color:#9ca3af; margin:6px 0 0;">Images, PDFs, Word, Excel &mdash; Max 10MB per file</p>
                         </div>
                         <input type="file" name="requisition_attachments" id="requisition_attachments"
@@ -1079,7 +1079,7 @@
                         padding-top: 16px;
                         border-top: 1px solid #e5e7eb;
                     ">
-                        <span style="font-size:.85rem; color:#6b7280;">
+                        <span style="font-size:.85rem; color:#000;">
                             <i class="fas fa-info-circle me-1"></i>All fields are required to proceed.
                         </span>
                         

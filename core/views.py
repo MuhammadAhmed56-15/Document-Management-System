@@ -1395,9 +1395,14 @@ def create_file(request):
         number = request.POST.get('file_number')
         desc = request.POST.get('description')
         
-        if name and number:
-            # Check if file_number already exists to avoid UNIQUE constraint error
-            if File.objects.filter(file_number=number).exists():
+        if number:
+            number = number.strip()
+        if not number:
+            number = None
+        
+        if name:
+            # Check if file_number already exists (if provided)
+            if number and File.objects.filter(file_number=number).exists():
                 messages.error(request, f"File number '{number}' already exists. Please use a different file number.")
             else:
                 File.objects.create(
@@ -1409,7 +1414,7 @@ def create_file(request):
                 messages.success(request, f"File '{name}' created successfully!")
                 return redirect('notesheet_files')
         else:
-            messages.error(request, "Please fill name and file number.")
+            messages.error(request, "Please fill the file name.")
             
     return render(request, 'create_file.html')
 
@@ -1516,7 +1521,7 @@ def initiate_notesheet(request):
                         )
 
                 messages.success(request, f"Notesheet '{notesheet.title}' created successfully!")
-                return redirect('my_notesheets')
+                return redirect('notesheet_outbox')
         else:
             messages.error(request, "Please fix the errors below and resubmit.")
 
@@ -1637,11 +1642,11 @@ def forward_notesheet(request, pk):
     if is_task:
         if notesheet.assigned_to != request.user and notesheet.assigned_by != request.user:
             messages.error(request, "You are not allowed to forward this.")
-            return redirect("my_notesheets")
+            return redirect('notesheet_outbox')
     else:
         if notesheet.current_holder != request.user and notesheet.created_by != request.user:
             messages.error(request, "You are not allowed to forward this.")
-            return redirect("my_notesheets")
+            return redirect('notesheet_outbox')
 # 2. TASK / NOTESHEET SYSTEM 1 (Manager Logic)
 # =========================================================
 
@@ -1740,7 +1745,7 @@ def initiate_notesheet(request):
                 )
 
                 messages.success(request, f"Notesheet '{notesheet.title}' created successfully!")
-                return redirect('my_notesheets')
+                return redirect('notesheet_outbox')
         else:
             messages.error(request, "Please fix the errors below and resubmit.")
 
@@ -1899,11 +1904,11 @@ def forward_notesheet(request, pk):
     if is_task:
         if notesheet.assigned_to != request.user and notesheet.assigned_by != request.user:
             messages.error(request, "You are not allowed to forward this.")
-            return redirect("my_notesheets")
+            return redirect('notesheet_outbox')
     else:
         if notesheet.current_holder != request.user and notesheet.created_by != request.user:
             messages.error(request, "You are not allowed to forward this.")
-            return redirect("my_notesheets")
+            return redirect('notesheet_outbox')
 
     if request.method == "POST":
         forwarded_to_id = request.POST.get("forwarded_to")
@@ -1980,7 +1985,7 @@ def forward_notesheet(request, pk):
             )
 
             messages.success(request, f"Forwarded to {forwarded_user.username}.")
-            return redirect("my_notesheets")
+            return redirect('notesheet_outbox')
         except User.DoesNotExist:
             messages.error(request, "Officer not found.")
 
@@ -2340,7 +2345,7 @@ def return_notesheet(request, pk):
         elif request.user.profile.role == 'PS':
             return redirect('ps_dashboard')
         else:
-            return redirect('my_notesheets')
+            return redirect('notesheet_outbox')
 
     # ── GET: existing flags/annexure/puc count SEPARATELY calculate karo ──
     all_attachments = NotesheetAttachment.objects.filter(notesheet=notesheet)
@@ -2649,6 +2654,20 @@ def edit_profile_signature(request):
     })
 
 
+@login_required
+def check_user_signature(request):
+    try:
+        from django.http import JsonResponse
+        profile = getattr(request.user, 'profile', None)
+        has_sig = bool(profile and profile.signature)
+        return JsonResponse({
+            'has_signature': has_sig,
+        })
+    except Exception as e:
+        from django.http import JsonResponse
+        return JsonResponse({'has_signature': False, 'error': str(e)})
+
+
 # 📥 INBOX VIEW
 @login_required
 def notesheet_inbox(request):
@@ -2702,16 +2721,7 @@ def api_unread_counts(request):
         status='Pending'
     ).count()
     
-    is_manager = False
-    if hasattr(request.user, 'profile') and request.user.profile.role:
-        if request.user.profile.role.category in ['ZM', 'Manager', 'GM', 'CEO'] or request.user.profile.role.code in ['Manager_Admin', 'Fleet_Manager', 'MngrFleet']:
-            is_manager = True
-            
-    if is_manager:
-        unread_requisitions_count = VehicleRequisition.objects.filter(manager_admin=request.user).exclude(status__in=['Completed', 'Rejected']).count()
-    else:
-        unread_requisitions_count = 0
-        
+    unread_requisitions_count = VehicleRequisition.objects.filter(manager_admin=request.user).exclude(status__in=['Completed', 'Rejected']).count()
     unread_commitments_count = Commitment.objects.filter(
         invited_managers=request.user,
         is_sent_to_manager=True,
@@ -3084,6 +3094,9 @@ def view_requisition(request, pk):
                 u.display_label = u.get_full_name() or u.username
             recipient_list.append(u)
 
+    # Check if user is a fleet officer (fzone user)
+    is_fleet_officer = 'fozone' in request.user.username.lower() or 'fleet_officer' in request.user.username.lower()
+
     return render(request, 'view_requisition.html', {
         'req': req,
         'is_manager': is_manager,
@@ -3091,6 +3104,7 @@ def view_requisition(request, pk):
         'attachments': attachments,
         'recipient_list': recipient_list,
         'forwards': forwards,
+        'is_fleet_officer': is_fleet_officer,
     })
 
 @login_required
@@ -3119,13 +3133,24 @@ def forward_requisition(request, pk):
                 req.save()
                 
                 from .models import VehicleRequisitionForward
-                VehicleRequisitionForward.objects.create(
+                fw = VehicleRequisitionForward(
                     requisition=req,
                     forwarded_by=request.user,
                     forwarded_to=new_admin,
                     remark=remark,
                     status_at_forward=req.status
                 )
+                
+                # Check if forwarded_by is a fleet officer and handle attachments
+                is_fleet_officer = 'fozone' in request.user.username.lower() or 'fleet_officer' in request.user.username.lower()
+                if is_fleet_officer:
+                    fw.is_fleet_officer_remark = True
+                    attachment_files = request.FILES.getlist('remark_attachments')
+                    att_fields = ['attachment_1', 'attachment_2', 'attachment_3', 'attachment_4', 'attachment_5']
+                    for i, att_file in enumerate(attachment_files[:5]):
+                        setattr(fw, att_fields[i], att_file)
+                
+                fw.save()
                 
                 # Notify the new manager
                 from .models import Notification
@@ -3303,22 +3328,22 @@ def api_get_logbook_history(request):
     from logbook.views import is_admin_or_ceo, get_user_zone
 
     if is_admin_or_ceo(request.user):
-        vehicles_qs = Vehicle.objects.all().order_by('vehicle_number')
+        vehicles_qs = Vehicle.objects.all().order_by('vehicle_id_number')
     else:
         user_zone = get_user_zone(request.user)
         if user_zone:
-            vehicles_qs = Vehicle.objects.filter(zone=user_zone).order_by('vehicle_number')
+            vehicles_qs = Vehicle.objects.filter(zone=user_zone).order_by('vehicle_id_number')
         else:
             vehicles_qs = Vehicle.objects.none()
 
     vehicles_data = [
         {
             'id': v.id,
-            'vehicle_number': v.vehicle_number,
-            'registration_number': v.registration_number or '',
-            'type': v.vehicle_type or '',
+            'vehicle_number': v.vehicle_id_number,
+            'registration_number': getattr(v, 'vehicle_name', ''),
+            'type': getattr(v, 'vehicle_type', ''),
             'zone': v.zone.title if v.zone else '',
-            'current_meter': v.current_meter_reading,
+            'current_meter': getattr(v, 'current_meter_reading', 0),
         }
         for v in vehicles_qs
     ]
@@ -3331,8 +3356,8 @@ def api_get_logbook_history(request):
     logbook, _ = LogBook.objects.get_or_create(
         vehicle=vehicle,
         defaults={
-            'vehicle_number': vehicle.vehicle_number,
-            'opening_meter_reading': vehicle.current_meter_reading
+            'vehicle_name': vehicle.vehicle_id_number,
+            'opening_meter_reading': getattr(vehicle, 'current_meter_reading', 0)
         }
     )
 
@@ -3393,13 +3418,13 @@ def api_get_logbook_history(request):
         'vehicles': vehicles_data,
         'vehicle': {
             'id': vehicle.id,
-            'vehicle_number': vehicle.vehicle_number,
-            'registration_number': vehicle.registration_number or '-',
-            'zone': vehicle.zone or '-',
-            'vehicle_type': vehicle.vehicle_type or '-',
-            'current_meter': vehicle.current_meter_reading,
-            'logbook_serial': logbook.serial_number or '-',
-            'average_to_litre': str(logbook.average_to_litre) if logbook.average_to_litre else '-',
+            'vehicle_number': vehicle.vehicle_id_number,
+            'registration_number': getattr(vehicle, 'vehicle_name', '-') or '-',
+            'zone': vehicle.zone.title if getattr(vehicle, 'zone', None) else '-',
+            'vehicle_type': getattr(vehicle, 'vehicle_type', '-') or '-',
+            'current_meter': getattr(vehicle, 'current_meter_reading', 0),
+            'logbook_serial': getattr(logbook, 'serial_number', '-'),
+            'average_to_litre': str(getattr(logbook, 'average_to_litre', '-')) if getattr(logbook, 'average_to_litre', None) else '-',
         },
         'total_pages': total_pages,
         'total_entries': total_entries,
@@ -3526,9 +3551,9 @@ def generate_logbook_history_pdf(vehicle, logbook, pages_qs, officer_name="Fleet
             return str(val)
 
     # Modern 4-Column Header Banner (matching Screenshot 3)
-    reg_num = vehicle.registration_number or vehicle.vehicle_number or '-'
-    type_zone = f"{vehicle.vehicle_type or '-'} ({vehicle.zone or '-'})"
-    meter_reading = f"{fmt_num(vehicle.current_meter_reading)} KM"
+    reg_num = getattr(vehicle, 'vehicle_name', None) or getattr(vehicle, 'vehicle_id_number', '-')
+    type_zone = f"{getattr(vehicle, 'vehicle_type', '-')} ({getattr(vehicle, 'zone', '-')})"
+    meter_reading = f"{fmt_num(getattr(vehicle, 'current_meter_reading', 0))} KM"
 
     meta_data = [
         [
@@ -3538,7 +3563,7 @@ def generate_logbook_history_pdf(vehicle, logbook, pages_qs, officer_name="Fleet
             Paragraph("CURRENT METER", banner_label_style),
         ],
         [
-            Paragraph(vehicle.vehicle_number, banner_val_style),
+            Paragraph(getattr(vehicle, 'vehicle_id_number', getattr(vehicle, 'vehicle_name', '-')), banner_val_style),
             Paragraph(reg_num, banner_val_style),
             Paragraph(type_zone, banner_val_style),
             Paragraph(meter_reading, banner_meter_style),
@@ -3599,7 +3624,7 @@ def generate_logbook_history_pdf(vehicle, logbook, pages_qs, officer_name="Fleet
             ]))
             elements.append(history_table)
         else:
-            empty_table = Table([[Paragraph(f"<i>Log Book Page {page.page_number} exists, but no entries have been recorded yet.</i>", normal_style)]], colWidths=[520])
+            empty_table = Table([[Paragraph(f"<i>Log Book Not Attached Yet (Page {page.page_number})</i>", normal_style)]], colWidths=[520])
             empty_table.setStyle(TableStyle([
                 ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
                 ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#e2e8f0')),
@@ -3667,8 +3692,8 @@ def api_attach_logbook_history(request):
     logbook, _ = LogBook.objects.get_or_create(
         vehicle=vehicle,
         defaults={
-            'vehicle_number': vehicle.vehicle_number,
-            'opening_meter_reading': vehicle.current_meter_reading
+            'vehicle_name': getattr(vehicle, 'vehicle_id_number', ''),
+            'opening_meter_reading': getattr(vehicle, 'current_meter_reading', 0)
         }
     )
 
@@ -3689,7 +3714,7 @@ def api_attach_logbook_history(request):
         officer_name=officer_name
     )
 
-    filename = f"Vehicle {vehicle.vehicle_number} - Digital Log Book History.pdf"
+    filename = f"Vehicle {getattr(vehicle, 'vehicle_id_number', getattr(vehicle, 'vehicle_name', 'Unknown'))} - Digital Log Book History.pdf"
 
     if notesheet_id:
         notesheet = get_object_or_404(Notesheet, id=notesheet_id)
