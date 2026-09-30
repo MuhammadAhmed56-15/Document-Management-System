@@ -1152,35 +1152,70 @@
   function buildAttachmentRow(isFirst) {
     const item = document.createElement('div');
     item.className = 'attachment-item';
-
-    const delBtn = isFirst
-      ? `<div style="width:36px;"></div>`
-      : `<button type="button" class="btn-icon remove-attachment-btn" title="Remove">&#x2715;</button>`;
+    item.style.display = 'flex';
+    item.style.alignItems = 'center';
+    item.style.gap = '0.5rem';
+    item.style.marginBottom = '0.5rem';
+    item.style.justifyContent = 'flex-start';
 
     item.innerHTML = `
-      <select class="type-select">
+      <select class="type-select" aria-label="Attachment type" style="width:120px; flex-shrink: 0;">
         <option value="flag">🚩 Flag</option>
         <option value="annexure">📎 Annexure</option>
         <option value="puc">📄 PUC</option>
       </select>
-      <span class="badge auto-badge badge--flag"></span>
+      <span class="badge auto-badge badge--flag" style="min-width:70px; text-align:center; flex-shrink: 0;"></span>
       <input type="hidden" name="attachment_flag[]"     value="">
       <input type="hidden" name="attachment_annexure[]" value="">
       <input type="hidden" name="attachment_puc[]"      value="">
       <input type="hidden" name="attachment_labels[]"   value="">
-      <input type="file"   name="attachments" class="attachment-item__input" style="flex:1;">
-      ${delBtn}
+      
+      <!-- Reduced width to 210px to minimize the gap after the file name -->
+      <input type="file"   name="attachments" class="attachment-item__input" style="flex-grow: 0 !important; flex-shrink: 1; width: 210px;">
+      
+      <!-- View Button -->
+      <button type="button" class="view-attachment-btn" title="View" style="display:none; background:#e0f2fe; color:#0369a1; border:1.5px solid #bae6fd; padding:4px 14px; border-radius:8px; font-size:0.85rem; font-weight:700; cursor:pointer; align-items:center; gap:4px; transition:all 0.2s; white-space:nowrap; flex-shrink:0;" onmouseover="this.style.background='#0284c7'; this.style.color='white';" onmouseout="this.style.background='#e0f2fe'; this.style.color='#0369a1';">
+        <i class="fas fa-eye"></i> View
+      </button>
+      
+      <!-- Remove Button -->
+      <button type="button" class="remove-attachment-btn" title="Remove" style="display:none; background:rgba(239,68,68,0.1); border:1.5px solid rgba(239,68,68,0.3); color:#dc2626; border-radius:8px; width:36px; height:36px; font-size:1.15rem; cursor:pointer; align-items:center; justify-content:center; transition:all 0.2s; flex-shrink:0;" onmouseover="this.style.background='#dc2626'; this.style.color='white'" onmouseout="this.style.background='rgba(239,68,68,0.1)'; this.style.color='#dc2626'">
+        &#x2715;
+      </button>
     `;
 
-    /* Re-run recalculate whenever user changes the type */
     item.querySelector('.type-select').addEventListener('change', recalculateAllBadges);
 
-    if (!isFirst) {
-      item.querySelector('.remove-attachment-btn').addEventListener('click', function () {
-        item.remove();
-        recalculateAllBadges();
-      });
-    }
+    item.querySelector('.remove-attachment-btn').addEventListener('click', function () {
+      item.remove();
+      recalculateAllBadges();
+    });
+
+    const fileInput = item.querySelector('.attachment-item__input');
+    const viewBtn = item.querySelector('.view-attachment-btn');
+    const removeBtn = item.querySelector('.remove-attachment-btn');
+    
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
+        viewBtn.style.display = 'inline-flex';
+        removeBtn.style.display = 'inline-flex';
+      } else {
+        viewBtn.style.display = 'none';
+        removeBtn.style.display = 'none';
+      }
+    });
+
+    viewBtn.addEventListener('click', function() {
+      if (fileInput.files && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileURL = URL.createObjectURL(file);
+        if (typeof previewAttachmentModal === 'function') {
+          previewAttachmentModal(fileURL, file.name);
+        } else {
+          window.open(fileURL, '_blank');
+        }
+      }
+    });
 
     return item;
   }
