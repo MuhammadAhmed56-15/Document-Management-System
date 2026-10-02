@@ -172,7 +172,7 @@
     
     .paper-form-header p {
         margin: 8px 0 0;
-        font-size:24px;
+        font-size: 18px;
         font-style: italic;
     }
     
@@ -553,7 +553,7 @@
     }
     .vdp-item-sub {
         font-size: 11px;
-        color:#000;
+        color: #6b7280;
         font-weight: 400;
     }
     .vdp-separator {
@@ -682,10 +682,10 @@
                                         alt="WSSP" style="width:130px;height:130px;max-width:100%;object-fit:contain;">
                                 </td>
                                 <td style="width:64%;text-align:center;vertical-align:middle;padding:6pt 8pt;">
-                                    <h4 style="font-weight:900;font-size:clamp(15px, 1.6vw, 26px);margin:0 0 5pt 0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.25;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap;">OFFICE OF THE ZONAL MANAGER (ZONE-D)</h4>
-                                    <h4 style="font-weight:800;font-size:clamp(14px, 1.5vw, 21px);margin:0 0 3pt 0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.35;word-wrap:break-word;">WATER & SANITATION SERVICES PESHAWAR</h4>
-                                    <p style="font-size:clamp(13px, 1.4vw, 20px);font-weight:700;margin:0 0 2pt 0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.35;text-transform:uppercase;">GOVERNMENT OF KHYBER PAKHTUNKHWA</p>
-                                    <p style="font-size:clamp(12px, 1.3vw, 18px);font-weight:600;margin:0;font-family:&quot;Times New Roman&quot;, Times, serif;color:#000;line-height:1.35;">House No: 23F, Khushal Khan Khattak Road, University Town, Peshawar</p>
+                                    <h4 style="font-weight:900;font-size:clamp(15px, 1.6vw, 26px);margin:0 0 5pt 0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.25;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;white-space:nowrap;">OFFICE OF THE ZONAL MANAGER (ZONE-D)</h4>
+                                    <h4 style="font-weight:800;font-size:clamp(14px, 1.5vw, 21px);margin:0 0 3pt 0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.35;word-wrap:break-word;">WATER & SANITATION SERVICES PESHAWAR</h4>
+                                    <p style="font-size:clamp(13px, 1.4vw, 20px);font-weight:700;margin:0 0 2pt 0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.35;text-transform:uppercase;">GOVERNMENT OF KHYBER PAKHTUNKHWA</p>
+                                    <p style="font-size:clamp(12px, 1.3vw, 18px);font-weight:600;margin:0;font-family:'Times New Roman', Times, serif;color:#000;line-height:1.35;">House No: 23F, Khushal Khan Khattak Road, University Town, Peshawar</p>
                                 </td>
                                 <td style="width:18%;text-align:center;vertical-align:middle;padding:6pt 4pt;">
                                     <img src="{% if request.user.profile.zone and request.user.profile.zone.logo_right %}{{ request.user.profile.zone.logo_right.url }}{% else %}{% static 'images/kpk_emblem.png' %}{% endif %}"
@@ -695,7 +695,7 @@
                         </table>
                         <div style="border-top:1px solid #000;margin:6pt 0 10pt 0;"></div>
                         
-                        <div class="text-center" style="font-size:24px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <div class="text-center" style="font-size: 18px; margin-top: 15px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
                             To, &nbsp;&nbsp;&nbsp;The Zonal Manager, Water & Sanitation Services,
                             <span style="display: inline-block; width: 200px;">
                                 <select id="id_zone" name="zone" class="form-input-line" required>
@@ -708,12 +708,12 @@
                             , Peshawar.
                         </div>
                         
-                        <div class="text-center mb-4 mt-1" style="font-size:24px; font-weight: bold;">
+                        <div class="text-center mb-4 mt-1" style="font-size: 18px; font-weight: bold;">
                             Respected Sir!
                         </div>
                         
                         <!-- Line 1: vehicle number + UC route -->
-                        <div style="display:flex; align-items:flex-end; gap:8px; font-size:24px; margin-bottom:6px; flex-wrap:nowrap;">
+                        <div style="display:flex; align-items:flex-end; gap:8px; font-size:18px; margin-bottom:6px; flex-wrap:nowrap;">
                             <span style="white-space:nowrap; flex-shrink:0;">It is respectfully submitted that vehicle number</span>
                             <span style="flex: 2 1 220px; min-width:180px; position:relative;">
 
@@ -759,7 +759,7 @@
                         </div>
 
                         <!-- Line 2: has the following issues -->
-                        <div style="font-size:24px; margin-bottom:18px;">
+                        <div style="font-size:18px; margin-bottom:18px;">
                             has the following issues:
                         </div>
                         
@@ -783,13 +783,13 @@
                             </div>
                         </div>
                         
-                        <div class="form-paragraph mb-4" style="font-size:24px; line-height: 2.2;">
+                        <div class="form-paragraph mb-4" style="font-size: 18px; line-height: 2.2;">
                             The above-mentioned problem(s) was resolved before on 
                             <span style="display: inline-block; width: 180px;">{{ form.previous_issue_date }}</span>. 
                             Therefore, you are requested to kindly issue orders to resolve the above-mentioned problem(s).
                         </div>
 
-                        <div class="form-paragraph mb-4" style="font-size:24px;">
+                        <div class="form-paragraph mb-4" style="font-size: 18px;">
                             <!-- No 'for' attribute — prevents native label-checkbox double toggle -->
                             <label onclick="toggleFirstTime()" style="
                                 display: flex;
@@ -865,7 +865,7 @@
                             });
                         </script>
                         
-                        <div class="form-paragraph mb-5" style="font-size:24px;">
+                        <div class="form-paragraph mb-5" style="font-size: 18px;">
                             <strong>Estimated Cost (if any):</strong> 
                             <span style="display: inline-block; width: 250px;">{{ form.estimated_cost }}</span>
                         </div>
@@ -887,18 +887,18 @@
 
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
                                     <div style="flex: 1; display: flex; align-items: flex-end;">
-                                        <span class="form-label-custom" style="font-size:24px; font-weight: normal;">Driver Name:</span>
+                                        <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">Driver Name:</span>
                                         <span style="flex: 1; margin-right: 30px;">{{ form.driver_name }}</span>
                                     </div>
                                 </div>
                                 
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
                                     <div style="flex: 1; display: flex; align-items: flex-end;">
-                                        <span class="form-label-custom" style="font-size:24px; font-weight: normal;">Mobile Number:</span>
+                                        <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">Mobile Number:</span>
                                         <span style="flex: 1; margin-right: 30px;">{{ form.driver_mobile }}</span>
                                     </div>
                                     <div style="flex: 1; display: flex; align-items: flex-end;">
-                                        <span class="form-label-custom" style="font-size:24px; font-weight: normal;">Date:</span>
+                                        <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">Date:</span>
                                         <div style="flex: 1; position: relative;">
                                             <input type="date"
                                                    id="requisition_date_input"
@@ -919,14 +919,15 @@
                                 </div>
                                 
                                 <div style="display: flex; align-items: flex-end; width: 50%; margin-bottom: 25px;">
-                                    <span class="form-label-custom" style="font-size:24px; font-weight: normal;">CNIC Number:</span>
+                                    <span class="form-label-custom" style="font-size: 18px; font-weight: normal;">CNIC Number:</span>
                                     <span style="flex: 1;">{{ form.driver_cnic }}</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="signature-area">
-                            <div class="signature-box">
+                        <!-- Driver Signature Row -->
+                        <div style="display: flex; align-items: flex-start; gap: 40px; margin-bottom: 28px; flex-wrap: wrap;">
+                            <div class="signature-box" style="flex: 0 0 auto;">
                                 <div class="sig-pad-container">
                                     <canvas id="driver-signature-pad"></canvas>
                                 </div>
@@ -944,14 +945,82 @@
                                 <input type="hidden" name="driver_signature_data" id="driver_signature_data">
                                 <div class="signature-line">Driver Signature / Thumb</div>
                             </div>
-                            <div class="signature-box">
-                                {% if request.user.profile.signature %}
-                                    <div class="mb-3 text-center">
-                                        <img src="{{ request.user.profile.signature.url }}" alt="Fleet Officer Signature" style="max-height: 80px; max-width: 100%;">
-                                    </div>
-                                {% endif %}
-                                <div class="mt-2" style="font-style: italic; font-size:24px;">{{ request.user.username }}</div>
-                                <div class="signature-line">Fleet Officer Signature</div>
+                        </div>
+
+                        <!-- Fleet Officer Remarks Section -->
+                        <div style="margin-bottom: 28px;">
+                            <div style="
+                                font-weight: 700;
+                                font-size: 0.92rem;
+                                color: #1a3c34;
+                                letter-spacing: 0.03em;
+                                text-transform: uppercase;
+                                margin-bottom: 14px;
+                                display: flex;
+                                align-items: center;
+                                gap: 8px;
+                            ">
+                                <span style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    width: 22px; height: 22px;
+                                    background: linear-gradient(135deg, #059669, #10b981);
+                                    border-radius: 50%;
+                                    flex-shrink: 0;
+                                ">
+                                    <i class="fas fa-pen" style="color:#fff; font-size:10px;"></i>
+                                </span>
+                                Fleet Officer Remarks
+                            </div>
+                            <!-- Remarks textarea — ruled-line style, Enter moves to next line -->
+                            <div style="margin-bottom: 22px;">
+                                <textarea
+                                    name="fleet_officer_remarks"
+                                    id="fleet_officer_remarks"
+                                    rows="3"
+                                    placeholder="Type remarks here..."
+                                    style="
+                                        width: 100%;
+                                        border: none;
+                                        outline: none;
+                                        resize: none;
+                                        overflow: hidden;
+                                        font-size: 15px;
+                                        font-family: inherit;
+                                        color: #1a3c34;
+                                        background-image: repeating-linear-gradient(
+                                            transparent,
+                                            transparent calc(2.2em - 1px),
+                                            #9ca3af calc(2.2em - 1px),
+                                            #9ca3af calc(2.2em)
+                                        );
+                                        background-size: 100% 2.2em;
+                                        line-height: 2.2em;
+                                        padding: 0 4px;
+                                        min-height: calc(2.2em * 3);
+                                        transition: background-image 0.2s;
+                                        display: block;
+                                    "
+                                    onfocus="this.style.backgroundImage=`repeating-linear-gradient(transparent, transparent calc(2.2em - 1px), #059669 calc(2.2em - 1px), #059669 calc(2.2em))`"
+                                    onblur="this.style.backgroundImage=`repeating-linear-gradient(transparent, transparent calc(2.2em - 1px), #9ca3af calc(2.2em - 1px), #9ca3af calc(2.2em))`"
+                                    oninput="this.style.minHeight='0'; this.style.minHeight = Math.max(this.scrollHeight, 3 * parseFloat(getComputedStyle(this).lineHeight)) + 'px';"
+                                ></textarea>
+                            </div>
+
+                            <!-- Fleet Officer Signature below remarks -->
+                            <div style="display: flex; justify-content: flex-end;">
+                                <div class="signature-box" style="text-align: center; min-width: 200px;">
+                                    {% if request.user.profile.signature %}
+                                        <div class="mb-2 text-center">
+                                            <img src="{{ request.user.profile.signature.url }}" alt="Fleet Officer Signature" style="max-height: 72px; max-width: 100%;">
+                                        </div>
+                                    {% else %}
+                                        <div style="height: 72px;"></div>
+                                    {% endif %}
+                                    <div class="mt-1" style="font-style: italic; font-size: 15px; color: #374151;">{{ request.user.username }}</div>
+                                    <div class="signature-line">Fleet Officer Signature</div>
+                                </div>
                             </div>
                         </div>
                         
@@ -982,32 +1051,35 @@
                         </div>
                     </div>
 
-                    <!-- Drop Zone -->
+                    <!-- Drop Zone (Compact) -->
                     <div id="attach-drop-zone" style="
                         border: 2px dashed #a7f3d0;
-                        border-radius: 12px;
+                        border-radius: 10px;
                         background: #fff;
-                        padding: 2rem 1.5rem;
+                        padding: 0.75rem 1.2rem;
                         text-align: center;
                         cursor: pointer;
                         transition: all 0.25s ease;
                         position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 14px;
                     "
                     onclick="document.getElementById('requisition_attachments').click()"
                     ondragover="attachDragOver(event)"
                     ondragleave="attachDragLeave(event)"
                     ondrop="attachDrop(event)">
-                        <div id="attach-drop-inner">
-                            <div style="margin-bottom:10px;">
-                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin:0 auto;display:block;">
-                                    <circle cx="24" cy="24" r="24" fill="#d1fae5"/>
-                                    <path d="M24 15v14M24 15l-5 5M24 15l5 5" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M14 33h20" stroke="#059669" stroke-width="2.2" stroke-linecap="round"/>
-                                </svg>
+                        <div id="attach-drop-inner" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:center;">
+                            <svg width="34" height="34" viewBox="0 0 48 48" fill="none" style="flex-shrink:0;">
+                                <circle cx="24" cy="24" r="24" fill="#d1fae5"/>
+                                <path d="M24 15v14M24 15l-5 5M24 15l5 5" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14 33h20" stroke="#059669" stroke-width="2.2" stroke-linecap="round"/>
+                            </svg>
+                            <div style="text-align:left;">
+                                <p style="font-family:var(--font-sans); font-weight:600; color:#065f46; font-size:0.9rem; margin:0 0 2px;">Drag &amp; drop files here</p>
+                                <p style="font-family:var(--font-sans); font-size:0.78rem; color:#6b7280; margin:0;">or <span style="color:#059669;font-weight:600;text-decoration:underline;">click to browse</span> &mdash; Images, PDFs, Word, Excel (Max 10MB)</p>
                             </div>
-                            <p style="font-family:var(--font-sans); font-weight:600; color:#065f46; font-size:0.97rem; margin:0 0 4px;">Drag &amp; drop files here</p>
-                            <p style="font-family:var(--font-sans); font-size:0.8rem; color:#000; margin:0;">or <span style="color:#059669;font-weight:600;text-decoration:underline;cursor:pointer;">click to browse</span></p>
-                            <p style="font-family:var(--font-sans); font-size:0.75rem; color:#9ca3af; margin:6px 0 0;">Images, PDFs, Word, Excel &mdash; Max 10MB per file</p>
                         </div>
                         <input type="file" name="requisition_attachments" id="requisition_attachments"
                                multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
@@ -1079,33 +1151,12 @@
                         padding-top: 16px;
                         border-top: 1px solid #e5e7eb;
                     ">
-                        <span style="font-size:.85rem; color:#000;">
+                        <span style="font-size:.85rem; color:#6b7280;">
                             <i class="fas fa-info-circle me-1"></i>All fields are required to proceed.
                         </span>
                         
                         <div style="display: flex; gap: 12px; align-items: center;">
-                            <button type="button" onclick="window.print()" style="
-                                background: #ef4444;
-                                color: #ffffff;
-                                font-weight: 700;
-                                font-size: .97rem;
-                                border: none;
-                                border-radius: 12px;
-                                padding: 13px 28px;
-                                box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
-                                cursor: pointer;
-                                transition: all .2s ease;
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 8px;
-                                letter-spacing: 0.02em;
-                            "
-                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 22px rgba(239, 68, 68, 0.45)'"
-                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(239, 68, 68, 0.35)'">
-                                <i class="fas fa-print"></i>
-                                Print
-                            </button>
-                            
+
                             <button type="submit" id="submit-btn" style="
                                 background: linear-gradient(135deg, #0d2b1e 0%, #059669 100%);
                                 color: #fff;
@@ -1884,65 +1935,8 @@ function syncFileInput() {
         if (cnicEl)   updateCnic  && updateCnic();
     });
 
-    /* ── Form Auto-Save (Draft functionality) ───────────────────────── */
-    const form = document.querySelector('form[action="{% url "create_requisition" %}"]');
-    if (form) {
-        const FORM_STORAGE_KEY = 'draft_requisition_form_data';
-
-        // Restore data on load
-        const savedData = sessionStorage.getItem(FORM_STORAGE_KEY);
-        if (savedData) {
-            try {
-                const formData = JSON.parse(savedData);
-                Object.keys(formData).forEach(key => {
-                    // Support Radio NodeLists and standard inputs
-                    const el = form.elements[key];
-                    if (!el) return;
-                    
-                    if (el instanceof NodeList) {
-                        el.forEach(node => {
-                            if (node.value === formData[key]) node.checked = true;
-                        });
-                    } else if (el.type !== 'file' && el.type !== 'submit' && el.name !== 'csrfmiddlewaretoken') {
-                        if (el.type === 'checkbox') {
-                            el.checked = formData[key];
-                        } else {
-                            el.value = formData[key];
-                        }
-                    }
-                });
-                
-                // Trigger input events for dependent fields (like formatting/counters)
-                setTimeout(() => {
-                    if (mobileEl) updateMobile && updateMobile();
-                    if (cnicEl)   updateCnic  && updateCnic();
-                }, 100);
-            } catch(e) {
-                console.error("Error restoring form draft", e);
-            }
-        }
-
-        // Save data on input/change
-        const saveFormState = function(e) {
-            if (e.target.name && e.target.type !== 'file' && e.target.name !== 'csrfmiddlewaretoken') {
-                const currentData = JSON.parse(sessionStorage.getItem(FORM_STORAGE_KEY) || '{}');
-                if (e.target.type === 'checkbox') {
-                    currentData[e.target.name] = e.target.checked;
-                } else {
-                    currentData[e.target.name] = e.target.value;
-                }
-                sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(currentData));
-            }
-        };
-
-        form.addEventListener('input', saveFormState);
-        form.addEventListener('change', saveFormState);
-
-        // Clear data on submit so it's fresh for the next requisition
-        form.addEventListener('submit', function() {
-            sessionStorage.removeItem(FORM_STORAGE_KEY);
-        });
-    }
+    /* ── Always clear any stale draft on page load ──────────────────── */
+    sessionStorage.removeItem('draft_requisition_form_data');
 
 })();
 </script>

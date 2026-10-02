@@ -755,12 +755,12 @@
                     </div>
                     
                     <!-- Line 1: vehicle number + UC route -->
-                    <div style="display:flex; align-items:center; gap:8px; font-size:24px; margin-bottom:15px; flex-wrap:wrap; line-height: 2;">
-                        <span>It is respectfully submitted that vehicle number</span>
+                    <div style="font-size:24px; margin-bottom:15px; line-height: 2;">
+                        It is respectfully submitted that vehicle number 
                         <span class="form-value-text text-center">{{ req.vehicle_number }}</span>
-                        <span>serving in U.C / Route</span>
+                        serving in U.C / Route 
                         <span class="form-value-text text-center">{{ req.uc_route|default:"N/A" }}</span>
-                        <span>has the following issues:</span>
+                        has the following issues:
                     </div>
                     
                     <!-- Issues Box -->
@@ -818,9 +818,9 @@
                         </div>
                     </div>
                     
-                    <!-- Signatures -->
-                    <div class="signature-area">
-                        <div class="signature-box">
+                    <!-- Signatures and Remarks -->
+                    <div style="margin-top: 50px;">
+                        <div class="signature-box" style="margin-bottom: 20px;">
                             {% if req.driver_signature %}
                                 <img src="{{ req.driver_signature.url }}" alt="Driver Signature" class="signature-img">
                             {% else %}
@@ -828,13 +828,45 @@
                             {% endif %}
                             <div class="signature-line">Driver Signature</div>
                         </div>
-                        <div class="signature-box">
-                            {% if req.fleet_officer_signature %}
-                                <img src="{{ req.fleet_officer_signature.url }}" alt="Fleet Officer Signature" class="signature-img">
-                            {% else %}
-                                <div style="height: 60px;"></div>
-                            {% endif %}
-                            <div class="signature-line">Fleet Officer Signature</div>
+
+                        <!-- Fleet Officer Remarks Section -->
+                        <div style="margin-bottom: 28px; page-break-inside: avoid;">
+                            <div style="
+                                font-weight: 700;
+                                font-size: 0.92rem;
+                                color: #1a3c34;
+                                letter-spacing: 0.03em;
+                                text-transform: uppercase;
+                                margin-bottom: 14px;
+                                display: flex;
+                                align-items: center;
+                                gap: 8px;
+                            ">
+                                <span style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    width: 22px; height: 22px;
+                                    background: linear-gradient(135deg, #059669, #10b981);
+                                    border-radius: 50%;
+                                    flex-shrink: 0;
+                                ">
+                                    <i class="fas fa-pen" style="color:#fff; font-size:10px;"></i>
+                                </span>
+                                Fleet Officer Remarks
+                            </div>
+                            <div class="issue-text-box" style="margin-top: 0; font-family: inherit; font-size: 19px;">{{ req.fleet_officer_remarks|default:"No remarks provided."|linebreaksbr }}</div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; page-break-inside: avoid;">
+                            <div class="signature-box" style="text-align: center; min-width: 200px;">
+                                {% if req.fleet_officer_signature %}
+                                    <img src="{{ req.fleet_officer_signature.url }}" alt="Fleet Officer Signature" class="signature-img">
+                                {% else %}
+                                    <div style="height: 60px;"></div>
+                                {% endif %}
+                                <div class="signature-line">Fleet Officer Signature</div>
+                            </div>
                         </div>
                     </div>
                     

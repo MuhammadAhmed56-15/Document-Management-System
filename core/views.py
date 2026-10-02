@@ -2911,6 +2911,7 @@ def create_requisition(request):
         if form.is_valid():
             req = form.save(commit=False)
             req.fleet_officer = request.user
+            req.fleet_officer_remarks = request.POST.get('fleet_officer_remarks', '').strip()
 
             # Fetch the selected recipient from the dropdown
             recipient_id = request.POST.get('send_to_manager')

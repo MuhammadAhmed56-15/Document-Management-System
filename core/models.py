@@ -538,6 +538,7 @@ class VehicleRequisition(models.Model):
     driver_signature = models.ImageField(upload_to='requisition_signatures/', blank=True, null=True)
     fleet_officer_signature = models.ImageField(upload_to='requisition_signatures/', blank=True, null=True)
     is_first_time = models.BooleanField(default=False, verbose_name="First time occurrence")
+    fleet_officer_remarks = models.TextField(blank=True, null=True, verbose_name="Fleet Officer Remarks")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     manager_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requisitions_received')
     created_at = models.DateTimeField(auto_now_add=True)
